@@ -2,28 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reviews Wall</title>
   <style>
-    /* This section ensures the reviews fill the whole TV screen */
-    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: white; }
-    .fbl_w_LhHdySbm85ILFw3jjFJY { width: 100% !important; height: 100vh !important; }
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; background-color: white; overflow: hidden; }
+    /* This forces the widget container to occupy the full screen height */
+    .fbl_w_LhHdySbm85ILFw3jjFJY { 
+        width: 100% !important; 
+        min-height: 100vh !important; 
+        display: block !important;
+    }
   </style>
 </head>
 <body>
 
   <div class="fbl_w_LhHdySbm85ILFw3jjFJY"></div>
 
-  <script>
-  !function(w,d){
-      if(!w||!d) return false;
-      d.addEventListener("DOMContentLoaded", function(event){
-          var s = d.createElement('script');
-          s.setAttribute('src','https://fbl.embedwidgets.com/LhHdySbm85ILFw3jjFJY.js');
-          d.body.appendChild(s);
-      });
-  }(window, document);
-  </script>
+  <script src="https://fbl.embedwidgets.com/LhHdySbm85ILFw3jjFJY.js" async></script>
 
 </body>
 </html>
