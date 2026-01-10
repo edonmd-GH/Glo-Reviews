@@ -1,174 +1,551 @@
-# Glo & Sparkle Digital Signage - Changes Summary
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Reviews - Medical Spa</title>
+    <style>
+        /* ============================================
+           MEDICAL SPA REVIEWS SHOWCASE
+           TV-Optimized Digital Signage for Yodeck
+           ============================================ */
+        
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* TV-Optimized Fullscreen Container */
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        /* Main Display Container - 16:9 Landscape */
+        .display-container {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 80px;
+        }
+        
+        /* ============================================
+           HEADER SECTION
+           ============================================ */
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 80px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            width: 300px;
+            height: 100px;
+            margin-right: 40px;
+            flex-shrink: 0;
+        }
+        
+        .screen-title {
+            font-size: 56px;
+            font-weight: 300;
+            color: #2d3436;
+            letter-spacing: -0.5px;
+        }
+        
+        /* ============================================
+           REVIEW CARDS
+           ============================================ */
+        .reviews-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+        
+        /* Base Review Card Styling */
+        .review-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 50px 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .review-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .review-card.fade-out {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        
+        /* Star Rating */
+        .star-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .star {
+            width: 36px;
+            height: 36px;
+            margin-right: 8px;
+            color: #ffa502;
+            font-size: 36px;
+        }
+        
+        /* Review Content */
+        .review-text {
+            font-size: 36px;
+            line-height: 1.5;
+            color: #2d3436;
+            margin-bottom: 30px;
+            font-weight: 300;
+            max-height: 216px; /* 3 lines max */
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .review-author {
+            font-size: 48px;
+            font-weight: 400;
+            color: #4a7a7b;
+            text-align: right;
+        }
+        
+        /* ============================================
+           LAYOUT MODE A: Single Review (Hero Focus)
+           ============================================ */
+        .layout-mode-a .review-card {
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .layout-mode-a .review-text {
+            font-size: 40px;
+            max-height: 240px;
+        }
+        
+        /* ============================================
+           LAYOUT MODE B: Two Reviews Side-by-Side
+           ============================================ */
+        .layout-mode-b .reviews-container {
+            gap: 40px;
+        }
+        
+        .layout-mode-b .review-card {
+            flex: 1;
+            max-width: 880px;
+            padding: 40px 50px;
+        }
+        
+        .layout-mode-b .review-text {
+            font-size: 32px;
+            max-height: 192px;
+        }
+        
+        .layout-mode-b .review-author {
+            font-size: 40px;
+        }
+        
+        /* ============================================
+           LAYOUT MODE C: Three Reviews Stacked
+           ============================================ */
+        .layout-mode-c {
+            justify-content: flex-start;
+        }
+        
+        .layout-mode-c .reviews-container {
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .layout-mode-c .review-card {
+            width: 1600px;
+            padding: 30px 50px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .layout-mode-c .star-rating {
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+        
+        .layout-mode-c .review-content {
+            flex: 1;
+        }
+        
+        .layout-mode-c .review-text {
+            font-size: 28px;
+            margin-bottom: 15px;
+            max-height: 84px;
+            -webkit-line-clamp: 2;
+        }
+        
+        .layout-mode-c .review-author {
+            font-size: 32px;
+            text-align: left;
+        }
+        
+        .layout-mode-c .star {
+            width: 28px;
+            height: 28px;
+            font-size: 28px;
+        }
+        
+        /* ============================================
+           RESPONSIVE ADJUSTMENTS FOR TV VIEWING
+           ============================================ */
+        @media screen and (max-width: 1920px) {
+            html, body {
+                width: 100vw;
+                height: 56.25vw; /* 16:9 aspect ratio */
+                min-height: 100vh;
+                min-width: 177.78vh;
+            }
+        }
+        
+        /* ============================================
+           CONFIGURATION NOTICE
+           ============================================ */
+        .config-notice {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #adb5bd;
+            opacity: 0.5;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="display-container layout-mode-a" id="displayContainer">
+        <!-- Header Section with Logo and Title -->
+        <div class="header-section">
+            <img src="logo.png" alt="Medical Spa Logo" class="logo" id="logo">
+            <h1 class="screen-title">Here Is What Our Clients Are Saying...</h1>
+        </div>
+        
+        <!-- Reviews Container -->
+        <div class="reviews-container" id="reviewsContainer">
+            <!-- Review cards will be dynamically inserted here -->
+        </div>
+        
+        <!-- Configuration Notice -->
+        <div class="config-notice">TV Display Mode | 1920×1080 | Auto-Playing</div>
+    </div>
 
-## ✅ **Modifications Applied**
-
-### 1. **Review Display Duration: EXACTLY 5 SECONDS**
-- **Location:** Line 423 in JavaScript section
-- **Setting:** `const REVIEW_DURATION = 5000;` (5000ms = 5 seconds)
-- **Verification:** Each review now displays for exactly 5 seconds before transitioning
-- **Implementation:** Uses `setInterval()` with 5000ms timing for precise control
-
-### 2. **Branding Update: G&S Replaced with Logo**
-- **Location:** Lines 84-97 in CSS section (`.logo` class)
-- **Changes Made:**
-  - Removed "G&S" text from logo div
-  - Added background image reference: `background-image: url('glo-sparkle-logo.pdf');`
-  - Increased logo width to 120px for better visibility
-  - Maintained 80px height for TV readability
-  - Added fallback styling with blue background and text
-  - Added proper background sizing and positioning
-
-**Logo Implementation Details:**
-```css
-.logo {
-    width: 120px;  /* Increased width for better logo visibility */
-    height: 80px;  /* Maintained height for TV readability */
-    background-image: url('glo-sparkle-logo.pdf');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    /* Fallback styling if image doesn't load */
-    background-color: var(--primary-color);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-}
-```
-
-### 3. **Text Removal: "Aesthetics and Medical Spa"**
-- **Location:** Line 280 in HTML section
-- **Action:** Completely removed the `<p>Aesthetics & MedSpa</p>` element
-- **Result:** Only the main title "Here is What Our Clients Are Saying" remains
-- **Title Size:** Increased to 48px to fill the space more appropriately
-
-**Before:**
-```html
-<div class="business-info">
-    <h1>Here is What Our Clients Are Saying</h1>
-    <p>Aesthetics & MedSpa</p>  <!-- REMOVED -->
-</div>
-```
-
-**After:**
-```html
-<div class="business-info">
-    <h1>Here is What Our Clients Are Saying</h1>
-    <!-- REMOVED: "Aesthetics and Medical Spa" text completely eliminated -->
-</div>
-```
-
----
-
-## 📁 **Files Created**
-
-### **Primary Updated File:**
-- `glo-sparkle-digital-signage-updated.html` - Complete system with all modifications
-
-### **Logo File:**
-- `glo-sparkle-logo.pdf` - Your attached logo (copied to output directory)
-
-### **Documentation:**
-- `CHANGES-SUMMARY.md` - This summary document
-
----
-
-## 🎯 **Implementation Notes**
-
-### **Logo Integration:**
-1. The logo is referenced as `glo-sparkle-logo.pdf` in the CSS
-2. **You need to:** Replace the PDF with your actual logo file in the same directory
-3. **Recommended formats:** PNG, JPG, or SVG for better web compatibility
-4. **File naming:** Keep it as `glo-sparkle-logo.pdf` or update the CSS reference
-
-### **Fallback Styling:**
-- If the logo image fails to load, the system shows a blue rectangle with "Logo" text
-- This ensures the display still looks professional even if the image is missing
-
-### **TV Optimization:**
-- Logo size increased from 80px to 120px width for better TV visibility
-- Maintained 80px height to fit within the header area
-- Added rounded corners (10px) for modern appearance
-
----
-
-## ✅ **Verification Checklist**
-
-### **Review Timing:**
-- [x] Each review displays for exactly 5 seconds
-- [x] Transitions occur automatically after 5 seconds
-- [x] No manual interaction required
-- [x] Smooth fade transitions between reviews
-
-### **Logo Replacement:**
-- [x] "G&S" text completely removed
-- [x] Logo placeholder added with proper styling
-- [x] Logo sized appropriately for TV display
-- [x] Fallback styling included
-
-### **Text Removal:**
-- [x] "Aesthetics and Medical Spa" completely eliminated
-- [x] No remaining references to removed text
-- [x] Layout adjusted to accommodate change
-- [x] Title remains prominent and readable
-
----
-
-## 🚀 **Next Steps**
-
-### **For Logo Integration:**
-1. Replace `glo-sparkle-logo.pdf` with your actual logo file
-2. Ensure the logo file is in the same directory as the HTML file
-3. Test the display to verify logo appears correctly
-4. Adjust logo dimensions in CSS if needed
-
-### **For Deployment:**
-1. Upload `glo-sparkle-digital-signage-updated.html` to your web server
-2. Add as Web Page asset in Yodeck
-3. Deploy to your TV/display
-4. Verify all changes are working correctly
-
-### **For Testing:**
-1. Open the HTML file in a web browser
-2. Verify reviews cycle every 5 seconds
-3. Confirm logo area shows your logo
-4. Check that "Aesthetics and Medical Spa" text is completely gone
-
----
-
-## 🔧 **Customization Options**
-
-### **Adjust Review Duration:**
-If you need to change the timing from exactly 5 seconds:
-```javascript
-const REVIEW_DURATION = 6000; // 6 seconds
-const REVIEW_DURATION = 4000; // 4 seconds
-```
-
-### **Adjust Logo Size:**
-If the logo appears too large or small on your TV:
-```css
-.logo {
-    width: 100px;  /* Adjust width */
-    height: 70px;  /* Adjust height */
-}
-```
-
-### **Change Logo File:**
-If you need to use a different logo file:
-```css
-.logo {
-    background-image: url('your-logo-file.png');
-}
-```
-
----
-
-## 📞 **Support**
-
-If you need any adjustments or have issues with the implementation, refer to the comprehensive documentation in the original package or contact support.
-
-**Your digital signage system is now ready with all requested modifications!** 🎉
+    <script>
+        /* ============================================
+           MEDICAL SPA REVIEWS SHOWCASE - CONFIGURATION
+           ============================================
+           
+           IMPORTANT CONFIGURATION AREAS:
+           1. REVIEW DATA: Add/edit reviews in the reviewsArray
+           2. LAYOUT MODE: Set LAYOUT_MODE to 'A', 'B', or 'C'
+           3. TIMING: Adjust DISPLAY_TIME and TRANSITION_TIME
+           4. LOGO: Replace logo.png with your actual logo file
+           
+           ============================================ */
+        
+        // ============================================
+        // CONFIGURATION VARIABLES
+        // ============================================
+        
+        // LAYOUT MODE: 'A' = Single Hero, 'B' = Two Side-by-Side, 'C' = Three Stacked
+        const LAYOUT_MODE = 'A';
+        
+        // TIMING CONFIGURATION (in milliseconds)
+        const DISPLAY_TIME = 5000;      // 5 seconds per review
+        const TRANSITION_TIME = 600;    // 0.6 second transition
+        
+        // REVIEW DATA - Add your 5-star reviews here
+        const reviewsArray = [
+            {
+                name: "Sarah M.",
+                text: "The staff here is absolutely incredible! Professional, caring, and the results exceeded my expectations. I feel more confident than ever.",
+                rating: 5
+            },
+            {
+                name: "Jennifer L.",
+                text: "Amazing experience from start to finish. The facility is beautiful and clean, and everyone made me feel so comfortable throughout my treatment.",
+                rating: 5
+            },
+            {
+                name: "Maria Rodriguez",
+                text: "I've been coming here for over a year now. The quality of service is consistently excellent. They truly care about their clients' satisfaction.",
+                rating: 5
+            },
+            {
+                name: "Emily Chen",
+                text: "Highly recommend! The consultation was thorough and personalized. I love how natural my results look. Will definitely be back!",
+                rating: 5
+            },
+            {
+                name: "Rachel Thompson",
+                text: "The best medical spa I've ever visited. The attention to detail and level of expertise is unmatched. Worth every penny.",
+                rating: 5
+            },
+            {
+                name: "Amanda K.",
+                text: "From the moment I walked in, I felt welcomed and cared for. The results speak for themselves - I'm thrilled with my outcome!",
+                rating: 5
+            },
+            {
+                name: "Lisa Park",
+                text: "Professional, knowledgeable, and genuinely caring team. They took the time to understand my goals and delivered beautiful results.",
+                rating: 5
+            },
+            {
+                name: "Michelle Davis",
+                text: "Exceptional service and outstanding results. The follow-up care was impressive. I wouldn't trust anyone else with my treatments.",
+                rating: 5
+            },
+            {
+                name: "Ashley Wilson",
+                text: "The entire experience was wonderful. The staff is friendly and professional, and the facility is gorgeous. Highly satisfied!",
+                rating: 5
+            },
+            {
+                name: "Nicole Brown",
+                text: "Incredible results and amazing customer service. They made me feel comfortable and informed throughout the entire process.",
+                rating: 5
+            }
+        ];
+        
+        // ============================================
+        // SYSTEM VARIABLES (DO NOT MODIFY)
+        // ============================================
+        let currentReviews = [];
+        let currentIndex = 0;
+        let reviewInterval;
+        let isTransitioning = false;
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        // Initialize the display when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set the layout mode
+            setLayoutMode(LAYOUT_MODE);
+            
+            // Start the review showcase
+            startReviewShowcase();
+            
+            // Handle logo loading errors (fallback if logo not found)
+            document.getElementById('logo').addEventListener('error', function() {
+                console.log('Logo not found, using text fallback');
+                this.style.display = 'none';
+                // Create text fallback
+                const logoFallback = document.createElement('div');
+                logoFallback.innerHTML = '<span style="font-size: 36px; color: #4a7a7b; font-weight: bold;">MED SPA</span>';
+                logoFallback.style.width = '300px';
+                logoFallback.style.height = '100px';
+                logoFallback.style.display = 'flex';
+                logoFallback.style.alignItems = 'center';
+                logoFallback.style.justifyContent = 'center';
+                logoFallback.style.marginRight = '40px';
+                document.querySelector('.header-section').insertBefore(logoFallback, this);
+            });
+        });
+        
+        // ============================================
+        // LAYOUT MANAGEMENT
+        // ============================================
+        
+        function setLayoutMode(mode) {
+            const container = document.getElementById('displayContainer');
+            container.className = 'display-container layout-mode-' + mode.toLowerCase();
+        }
+        
+        // ============================================
+        // REVIEW SHOWCASE LOGIC
+        // ============================================
+        
+        function startReviewShowcase() {
+            // Filter for 5-star reviews only
+            const fiveStarReviews = reviewsArray.filter(review => review.rating === 5);
+            
+            // Shuffle reviews for first display
+            currentReviews = shuffleArray([...fiveStarReviews]);
+            currentIndex = 0;
+            
+            // Display first set of reviews
+            displayReviews();
+            
+            // Start auto-play interval
+            startAutoPlay();
+        }
+        
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = '';
+            
+            // Determine how many reviews to show based on layout mode
+            let reviewsToShow;
+            switch(LAYOUT_MODE) {
+                case 'A': reviewsToShow = 1; break;
+                case 'B': reviewsToShow = 2; break;
+                case 'C': reviewsToShow = 3; break;
+                default: reviewsToShow = 1;
+            }
+            
+            // Create review cards
+            for (let i = 0; i < reviewsToShow; i++) {
+                const reviewIndex = (currentIndex + i) % currentReviews.length;
+                const review = currentReviews[reviewIndex];
+                
+                const reviewCard = createReviewCard(review);
+                container.appendChild(reviewCard);
+                
+                // Animate in with slight delay
+                setTimeout(() => {
+                    reviewCard.classList.add('visible');
+                }, i * 100);
+            }
+        }
+        
+        function createReviewCard(review) {
+            const card = document.createElement('div');
+            card.className = 'review-card';
+            
+            // Create star rating
+            const stars = '★'.repeat(5);
+            
+            card.innerHTML = `
+                <div class="star-rating">
+                    <span class="star">${stars}</span>
+                </div>
+                <div class="review-content">
+                    <div class="review-text">"${review.text}"</div>
+                    <div class="review-author">- ${review.name}</div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function startAutoPlay() {
+            // Clear any existing interval
+            if (reviewInterval) {
+                clearInterval(reviewInterval);
+            }
+            
+            // Set new interval
+            reviewInterval = setInterval(() => {
+                nextReview();
+            }, DISPLAY_TIME);
+        }
+        
+        function nextReview() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            // Fade out current reviews
+            const cards = document.querySelectorAll('.review-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('fade-out');
+                }, index * 50);
+            });
+            
+            // Update index and prepare next reviews
+            setTimeout(() => {
+                // Move to next review (or shuffle if at end)
+                currentIndex++;
+                if (currentIndex >= currentReviews.length) {
+                    currentIndex = 0;
+                    // Reshuffle to prevent repeats
+                    currentReviews = shuffleArray([...currentReviews]);
+                }
+                
+                // Display next reviews
+                displayReviews();
+                
+                // Reset transition flag
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, TRANSITION_TIME);
+                
+            }, TRANSITION_TIME);
+        }
+        
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // ============================================
+        // ERROR HANDLING & RESILIENCE
+        // ============================================
+        
+        // Handle visibility change (tab switching)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Pause when hidden
+                if (reviewInterval) {
+                    clearInterval(reviewInterval);
+                }
+            } else {
+                // Resume when visible
+                startAutoPlay();
+            }
+        });
+        
+        // Handle window focus/blur
+        window.addEventListener('blur', function() {
+            if (reviewInterval) {
+                clearInterval(reviewInterval);
+            }
+        });
+        
+        window.addEventListener('focus', function() {
+            startAutoPlay();
+        });
+        
+        // Graceful error handling
+        window.addEventListener('error', function(e) {
+            console.log('System error handled gracefully:', e.error);
+            // Attempt to recover
+            setTimeout(() => {
+                startReviewShowcase();
+            }, 1000);
+        });
+        
+    </script>
+</body>
+</html>
