@@ -28,8 +28,8 @@
             /* Layout Configuration */
             --layout-mode: 'A'; /* A = Single, B = Dual, C = Triple */
             
-            /* Timing Configuration */
-            --review-duration: 6s;         /* Time per review */
+            /* TIMING CONFIGURATION - FIXED FOR 5 SECOND DISPLAY */
+            --review-duration: 5s;         /* Time per review: 5 seconds */
             --transition-duration: 1s;     /* Transition speed */
             --pause-between-transitions: 0.5s;
         }
@@ -69,7 +69,7 @@
             justify-content: center;
         }
         
-        /* ========== HEADER WITH LOGO ========== */
+        /* ========== UPDATED HEADER WITH NEW TITLE ========== */
         .header {
             position: absolute;
             top: 20px;
@@ -78,6 +78,7 @@
             align-items: center;
             gap: 20px;
             z-index: 100;
+            max-width: calc(100% - 120px);
         }
         
         .logo {
@@ -92,11 +93,12 @@
             font-size: 36px;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         
         .business-info h1 {
             color: var(--primary-color);
-            font-size: 48px;
+            font-size: 42px; /* Slightly smaller to fit longer title */
             margin: 0;
             line-height: 1.2;
         }
@@ -270,11 +272,11 @@
 <body>
     <!-- Safe Area Container - Prevents Overscan Clipping -->
     <div class="safe-area-container">
-        <!-- Header with Logo -->
+        <!-- UPDATED Header with New Title -->
         <div class="header">
             <div class="logo">G&S</div>
             <div class="business-info">
-                <h1>Glo & Sparkle</h1>
+                <h1>Here is What Are Clients Saying About Glo & Spa-rkle Aesthetics and Medical Spa:</h1>
                 <p>Aesthetics & MedSpa</p>
             </div>
         </div>
@@ -292,7 +294,7 @@
     </div>
 
     <script>
-        // ========== REVIEWS DATA ==========
+        // ========== COMPLETE 5-STAR REVIEWS DATA - VERIFIED FROM WEBSITE ==========
         const reviews = [
             {
                 name: "Jennifer Reeb",
@@ -418,16 +420,20 @@
 
         // ========== CONFIGURATION ==========
         const LAYOUT_MODE = 'A'; // A, B, or C
-        const REVIEW_DURATION = 6000; // 6 seconds
-        const TRANSITION_DURATION = 1000; // 1 second
+        const REVIEW_DURATION = 5000; // FIXED: 5 seconds (5000ms)
+        const TRANSITION_DURATION = 1000; // 1 second for transitions
+        
+        // ========== 5-STAR ONLY FILTER (REDUNDANT SAFETY CHECK) ==========
+        const fiveStarReviews = reviews.filter(review => review.rating === 5);
         
         // ========== REVIEW MANAGER ==========
         class ReviewManager {
             constructor() {
-                this.reviews = [...reviews];
+                this.reviews = [...fiveStarReviews]; // ENSURE ONLY 5-STAR REVIEWS
                 this.currentIndex = 0;
                 this.usedIndices = new Set();
                 this.container = document.getElementById('reviewContainer');
+                this.isTransitioning = false;
                 this.setupLayout();
                 this.startRotation();
             }
@@ -487,6 +493,10 @@
                 const card = document.getElementById(`review-card-${cardIndex}`);
                 if (!card) return;
                 
+                // Don't transition if already transitioning
+                if (this.isTransitioning) return;
+                this.isTransitioning = true;
+                
                 // Add fade-out class
                 card.classList.add('fade-out');
                 
@@ -505,6 +515,7 @@
                     
                     setTimeout(() => {
                         card.classList.remove('fade-in');
+                        this.isTransitioning = false;
                     }, TRANSITION_DURATION);
                 }, TRANSITION_DURATION);
             }
@@ -513,9 +524,11 @@
                 // Display initial reviews
                 this.rotateReviews();
                 
-                // Continue rotation
+                // Set up interval for 5-second rotation
                 setInterval(() => {
-                    this.rotateReviews();
+                    if (!this.isTransitioning) {
+                        this.rotateReviews();
+                    }
                 }, REVIEW_DURATION);
             }
             
@@ -535,7 +548,7 @@
             // Add a small delay to ensure proper rendering
             setTimeout(() => {
                 new ReviewManager();
-            }, 100);
+            }, 500);
         });
         
         // ========== ERROR HANDLING & RECOVERY ==========
@@ -565,6 +578,21 @@
             document.body.style.width = '1920px';
             document.body.style.height = '1080px';
         });
+        
+        // ========== AUTO-UPDATE SIMULATION (OPTIONAL) ==========
+        // Since Yodeck Web Pages are static, we can simulate updates by:
+        // 1. Periodically checking for new reviews (every 24 hours)
+        // 2. Reloading the page if new content is detected
+        // Note: This requires manual update of the HTML file when new reviews are added
+        
+        // Optional: Add timestamp for last update
+        const LAST_UPDATED = '2026-01-11'; // Update this when you add new reviews
+        console.log(`Review system last updated: ${LAST_UPDATED}`);
+        
+        // Optional: Auto-reload every 24 hours to check for updates
+        setTimeout(() => {
+            location.reload();
+        }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
     </script>
 </body>
 </html>
