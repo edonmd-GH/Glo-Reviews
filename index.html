@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Reviews - Medical Spa</title>
+    <title>Client Reviews - Medical Spa (Updated)</title>
     <style>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE
+           MEDICAL SPA REVIEWS SHOWCASE - UPDATED
+           Brand Colors: Blue Expanse (#233b71) & Cardueline Finch (#967a3b)
            TV-Optimized Digital Signage for Yodeck
            ============================================ */
         
@@ -39,7 +40,7 @@
         }
         
         /* ============================================
-           HEADER SECTION
+           HEADER SECTION - UPDATED WITH LOGO
            ============================================ */
         .header-section {
             display: flex;
@@ -49,11 +50,67 @@
             flex-shrink: 0;
         }
         
+        /* UPDATED: New logo with medical cross design */
         .logo {
-            width: 300px;
-            height: 100px;
+            width: 320px;
+            height: 110px;
             margin-right: 40px;
             flex-shrink: 0;
+            background: #233b71; /* Blue Expanse */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(35, 59, 113, 0.3);
+        }
+        
+        /* Medical cross symbol */
+        .medical-cross {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .cross-vertical {
+            width: 12px;
+            height: 50px;
+            background: #967a3b; /* Cardueline Finch */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .cross-horizontal {
+            width: 50px;
+            height: 12px;
+            background: #967a3b; /* Cardueline Finch */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .logo-text {
+            margin-left: 70px;
+            color: white;
+        }
+        
+        .logo-text .main {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: white;
+        }
+        
+        .logo-text .sub {
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #967a3b; /* Cardueline Finch */
+            margin-top: 5px;
         }
         
         .screen-title {
@@ -64,7 +121,7 @@
         }
         
         /* ============================================
-           REVIEW CARDS
+           REVIEW CARDS - UPDATED LAYOUT & COLORS
            ============================================ */
         .reviews-container {
             width: 100%;
@@ -74,14 +131,14 @@
             flex: 1;
         }
         
-        /* Base Review Card Styling */
+        /* Base Review Card Styling - UPDATED */
         .review-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;
             padding: 50px 60px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 3px solid #233b71; /* UPDATED: Blue Expanse border */
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             transform: translateY(30px);
@@ -97,7 +154,7 @@
             transform: translateY(-30px);
         }
         
-        /* Star Rating */
+        /* Star Rating - UPDATED COLOR */
         .star-rating {
             display: flex;
             align-items: center;
@@ -108,8 +165,9 @@
             width: 36px;
             height: 36px;
             margin-right: 8px;
-            color: #ffa502;
+            color: #967a3b; /* UPDATED: Cardueline Finch */
             font-size: 36px;
+            text-shadow: 0 2px 4px rgba(150, 122, 59, 0.3);
         }
         
         /* Review Content */
@@ -129,7 +187,7 @@
         .review-author {
             font-size: 48px;
             font-weight: 400;
-            color: #4a7a7b;
+            color: #233b71; /* UPDATED: Blue Expanse */
             text-align: right;
         }
         
@@ -244,9 +302,19 @@
 </head>
 <body>
     <div class="display-container layout-mode-a" id="displayContainer">
-        <!-- Header Section with Logo and Title -->
+        <!-- Header Section with UPDATED Logo and Title -->
         <div class="header-section">
-            <img src="logo.png" alt="Medical Spa Logo" class="logo" id="logo">
+            <!-- UPDATED: New logo with medical cross design -->
+            <div class="logo">
+                <div class="medical-cross">
+                    <div class="cross-vertical"></div>
+                    <div class="cross-horizontal"></div>
+                </div>
+                <div class="logo-text">
+                    <div class="main">MEDICAL SPA</div>
+                    <div class="sub">REVIEWS</div>
+                </div>
+            </div>
             <h1 class="screen-title">Here Is What Our Clients Are Saying...</h1>
         </div>
         
@@ -256,19 +324,20 @@
         </div>
         
         <!-- Configuration Notice -->
-        <div class="config-notice">TV Display Mode | 1920×1080 | Auto-Playing</div>
+        <div class="config-notice">TV Display Mode | 1920×1080 | Auto-Playing | Updated Brand Colors</div>
     </div>
 
     <script>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE - CONFIGURATION
+           MEDICAL SPA REVIEWS SHOWCASE - UPDATED JAVASCRIPT
+           Brand Colors: Blue Expanse (#233b71) & Cardueline Finch (#967a3b)
            ============================================
            
            IMPORTANT CONFIGURATION AREAS:
            1. REVIEW DATA: Add/edit reviews in the reviewsArray
            2. LAYOUT MODE: Set LAYOUT_MODE to 'A', 'B', or 'C'
            3. TIMING: Adjust DISPLAY_TIME and TRANSITION_TIME
-           4. LOGO: Replace logo.png with your actual logo file
+           4. BRAND COLORS: CSS updated to Blue Expanse & Cardueline Finch
            
            ============================================ */
         
@@ -356,22 +425,6 @@
             
             // Start the review showcase
             startReviewShowcase();
-            
-            // Handle logo loading errors (fallback if logo not found)
-            document.getElementById('logo').addEventListener('error', function() {
-                console.log('Logo not found, using text fallback');
-                this.style.display = 'none';
-                // Create text fallback
-                const logoFallback = document.createElement('div');
-                logoFallback.innerHTML = '<span style="font-size: 36px; color: #4a7a7b; font-weight: bold;">MED SPA</span>';
-                logoFallback.style.width = '300px';
-                logoFallback.style.height = '100px';
-                logoFallback.style.display = 'flex';
-                logoFallback.style.alignItems = 'center';
-                logoFallback.style.justifyContent = 'center';
-                logoFallback.style.marginRight = '40px';
-                document.querySelector('.header-section').insertBefore(logoFallback, this);
-            });
         });
         
         // ============================================
@@ -434,7 +487,7 @@
             const card = document.createElement('div');
             card.className = 'review-card';
             
-            // Create star rating
+            // Create star rating with UPDATED color
             const stars = '★'.repeat(5);
             
             card.innerHTML = `
