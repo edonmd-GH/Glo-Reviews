@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- CRITICAL FIX: Set viewport to exact TV resolution and disable scaling -->
+    <!-- CRITICAL: Set viewport to exact TV resolution and disable scaling -->
     <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -28,7 +28,7 @@
             /* Layout Configuration */
             --layout-mode: 'A'; /* A = Single, B = Dual, C = Triple */
             
-            /* TIMING CONFIGURATION - FIXED FOR 5 SECOND DISPLAY */
+            /* Timing Configuration */
             --review-duration: 5s;         /* Time per review: 5 seconds */
             --transition-duration: 1s;     /* Transition speed */
             --pause-between-transitions: 0.5s;
@@ -69,7 +69,7 @@
             justify-content: center;
         }
         
-        /* ========== UPDATED HEADER WITH NEW TITLE ========== */
+        /* ========== HEADER WITH LOGO ========== */
         .header {
             position: absolute;
             top: 20px;
@@ -268,15 +268,16 @@
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
     <!-- Safe Area Container - Prevents Overscan Clipping -->
     <div class="safe-area-container">
-        <!-- UPDATED Header with New Title -->
+        <!-- Header with Logo -->
         <div class="header">
             <div class="logo">G&S</div>
             <div class="business-info">
-                <h1>Here is What Are Clients Saying About Glo & Spa-rkle Aesthetics and Medical Spa:</h1>
+                <h1>Here is What Our Clients Are Saying</h1>
                 <p>Aesthetics & MedSpa</p>
             </div>
         </div>
@@ -297,122 +298,122 @@
         // ========== COMPLETE 5-STAR REVIEWS DATA - VERIFIED FROM WEBSITE ==========
         const reviews = [
             {
-                name: "Jennifer Reeb",
-                text: "Phenomenal Botox, lip flip, and lip filler! I cannot say enough good things about Glo & Sparkle. They are professional, personable, and truly care about their clients. I have been to several med spas and this place is hands down my favorite. I always get natural results which is exactly what I want!",
+                name: "Roxana Soria",
+                text: "It's an excellent place, the girl who did the laser treatment to remove the tattoo from my eyebrows is undoubtedly the best, very friendly and professional.",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Janie Melancon",
+                text: "Amazing experience!! Amazing team!! Amazing!! It's all I can say!! Get here today!!!",
                 rating: 5,
                 source: "Google Review"
             },
             {
                 name: "L Garrison",
-                text: "The staff is exceptional! Everyone is so friendly and welcoming. They explain everything in detail and make you feel pampered. I had a facial and Botox and loved the results. The spa is beautiful and relaxing. Highly recommend!",
+                text: "The staff is exceptional. Alyssa educated me thoroughly and gave me realistic expectations during my consult. I felt pampered and comfortable throughout the entire experience. After my facial and dermaplaning, my skin looks better than it has in years!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Carleigh Fraze",
-                text: "Absolutely amazing! I refuse to go anywhere else. They are so sweet and caring. They take their time and make sure you are comfortable with everything. I drive 2 hours just to come here because they are that good!",
+                name: "Tiffany Smith",
+                text: "Alyssa did an amazing job. She is full of knowledge and is on top of all of the latest in skin care. I would recommend Alyssa for any service. She made me feel more confident.",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Lacey",
-                text: "Beautiful space with amazing staff! I got the VIP membership and it is so worth it. They have so many services and the atmosphere is so relaxing. I look forward to every visit!",
+                name: "Molly Macha",
+                text: "LOVE THEM! Fabulous and educational while making me feel youthful!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Emily Smith",
+                text: "Love coming to Glo & Sparkle! The staff is great and attentive, especially Alyssa! She took the time to listen to my concerns, give suggestions and figure out a plan that was best for me. It was the best treatment I've ever had and I tell my friends about my experience all the time! Can't recommend her or this place enough!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Madi Last",
+                text: "Alyssa did amazing! My forehead is transformed from her and Xeomin. The ZO skin care line is the literal best. Highly recommend.",
                 rating: 5,
                 source: "Google Review"
             },
             {
                 name: "Sam Riddle",
-                text: "Best med-spa in Lubbock! Professional, knowledgeable, and friendly staff. They take time to understand your needs and deliver amazing results. Highly recommend their services!",
+                text: "The best med-spa in Lubbock! I absolutely love all the different treatments offered. Definitely the place to go for all your glam needs!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Ashley Martinez",
-                text: "Love this place! The staff is amazing and the results are always perfect. They make you feel so comfortable and explain everything. Definitely my go-to for all aesthetic services!",
+                name: "Monica",
+                text: "La mejor experiencia",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Rachel Johnson",
-                text: "Exceptional service every time! The team is professional, friendly, and incredibly skilled. I trust them completely with all my aesthetic needs. Beautiful facility too!",
+                name: "Jesus Borjas",
+                text: "I'm getting tattoo removal services and love the results!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Megan Taylor",
-                text: "Wonderful experience! The staff is so knowledgeable and makes you feel at ease. Great results with Botox and fillers. The spa atmosphere is so calming and luxurious!",
+                name: "Shannon Crawford",
+                text: "They were so nice and super friendly.",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Brittany Wilson",
-                text: "Amazing results and incredible staff! They listen to your concerns and deliver exactly what you're looking for. The facility is gorgeous and so relaxing. Highly recommend!",
+                name: "Jennifer Reeb",
+                text: "I've been coming here for over a year and they do phenomenal Botox. The results look natural and they always make sure I'm satisfied with how it looks. I highly recommend a membership! It keeps you maintained at a discounted price. Also, they are very accommodating to schedule!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Courtney Davis",
-                text: "Love everything about Glo & Sparkle! Professional, friendly, and talented staff. They take time to ensure you're happy with results. Worth every penny!",
+                name: "Joanna Menjares",
+                text: "Fa-tia made me feel so comfortable and did an amazing job! Will be coming back!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Kelsey Brown",
-                text: "Perfect experience every time! Staff is amazing and results are flawless. They make you feel so welcome and comfortable. Best med spa in Lubbock!",
+                name: "Vanda Pauwels",
+                text: "Awesome service! Love the results!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Hannah Clark",
-                text: "Outstanding service and beautiful results! The team is so professional and caring. They explain everything thoroughly. I wouldn't go anywhere else!",
+                name: "Veronica Rodriguez",
+                text: "Very friendly and made me feel very comfortable, talked me through the procedure",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Lauren Garcia",
-                text: "Fantastic experience! Staff is incredibly knowledgeable and friendly. They deliver natural-looking results every time. The spa is absolutely beautiful!",
+                name: "Carleigh Fraze",
+                text: "Every time I come here it is just absolutely amazing!! I love the staff and how comfortable the atmosphere is. I have been coming here for a year now and I refuse to go anywhere else for my Botox and Lip Filler!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Sarah Martinez",
-                text: "Love the atmosphere and the staff! They are true professionals who care about their clients. Always get amazing results. Highly recommend to everyone!",
+                name: "Lacey",
+                text: "Fa-tia and Dr. Onkendi are amazing! This is a beautiful space, staff is wonderful, and they offer so many great services and treatments. They care about aesthetics and comfort, and take the time to provide a thorough service catered to your beauty goals. I'm very happy with my Xeomin and Restalynn filler results. Just do it... get that VIP membership. I can't wait to go back!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Emma Thompson",
-                text: "Best aesthetic services in Lubbock! The staff is wonderful and the facility is gorgeous. They always deliver exactly what I'm looking for. Love this place!",
+                name: "Avery Agnew",
+                text: "Fa-Tia & her team do an amazing job, always! Go see them!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Olivia Rodriguez",
-                text: "Incredible service and beautiful facility! The staff makes you feel so comfortable and the results speak for themselves. Definitely recommend!",
+                name: "Chelsea Lewis",
+                text: "I've only great experiences here! They make you feel comfortable!",
                 rating: 5,
                 source: "Google Review"
             },
             {
-                name: "Sophia Lee",
-                text: "Amazing staff and perfect results every time! They are so professional and caring. The spa atmosphere is so relaxing. Wouldn't trust anyone else!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Ava White",
-                text: "Wonderful med spa with exceptional staff! They take time to understand your goals and deliver beautiful, natural results. Highly recommend!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Isabella Jackson",
-                text: "Love this med spa! Professional, friendly, and incredibly talented team. The facility is beautiful and the results are always perfect!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Mia Harris",
-                text: "Exceptional med spa experience! Staff is knowledgeable and caring. They deliver amazing results in a beautiful, relaxing environment. Love it here!",
+                name: "Farrah Dirkes",
+                text: "Alli did such an amazing job! Highly recommend this med spa for ANY needs!",
                 rating: 5,
                 source: "Google Review"
             }
@@ -420,8 +421,8 @@
 
         // ========== CONFIGURATION ==========
         const LAYOUT_MODE = 'A'; // A, B, or C
-        const REVIEW_DURATION = 5000; // FIXED: 5 seconds (5000ms)
-        const TRANSITION_DURATION = 1000; // 1 second for transitions
+        const REVIEW_DURATION = 5000; // 5 seconds
+        const TRANSITION_DURATION = 1000; // 1 second
         
         // ========== 5-STAR ONLY FILTER (REDUNDANT SAFETY CHECK) ==========
         const fiveStarReviews = reviews.filter(review => review.rating === 5);
@@ -578,21 +579,6 @@
             document.body.style.width = '1920px';
             document.body.style.height = '1080px';
         });
-        
-        // ========== AUTO-UPDATE SIMULATION (OPTIONAL) ==========
-        // Since Yodeck Web Pages are static, we can simulate updates by:
-        // 1. Periodically checking for new reviews (every 24 hours)
-        // 2. Reloading the page if new content is detected
-        // Note: This requires manual update of the HTML file when new reviews are added
-        
-        // Optional: Add timestamp for last update
-        const LAST_UPDATED = '2026-01-11'; // Update this when you add new reviews
-        console.log(`Review system last updated: ${LAST_UPDATED}`);
-        
-        // Optional: Auto-reload every 24 hours to check for updates
-        setTimeout(() => {
-            location.reload();
-        }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
     </script>
 </body>
 </html>
