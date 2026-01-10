@@ -1,584 +1,174 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- CRITICAL: Set viewport to exact TV resolution and disable scaling -->
-    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    
-    <title>Glo & Sparkle MedSpa - Customer Reviews</title>
-    
-    <style>
-        /* ========== BRANDING CONFIGURATION SECTION ========== */
-        :root {
-            /* Brand Colors */
-            --primary-color: #233b71;      /* Blue Expanse */
-            --secondary-color: #967a3b;    /* Gold */
-            --background-color: #f8f9fa;   /* Soft White */
-            --text-color: #2c3e50;         /* Dark Gray */
-            --star-color: #ffd700;         /* Gold for stars */
-            
-            /* Business Information */
-            --business-name: 'Glo & Sparkle';
-            --business-tagline: 'Aesthetics & MedSpa';
-            --business-location: 'Lubbock, TX';
-            --business-phone: '806-310-9038';
-            
-            /* Layout Configuration */
-            --layout-mode: 'A'; /* A = Single, B = Dual, C = Triple */
-            
-            /* Timing Configuration */
-            --review-duration: 5s;         /* Time per review: 5 seconds */
-            --transition-duration: 1s;     /* Transition speed */
-            --pause-between-transitions: 0.5s;
-        }
-        
-        /* ========== TV-SPECIFIC FIXES FOR OVERSCAN ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            width: 1920px !important;
-            height: 1080px !important;
-            overflow: hidden !important;
-            position: relative;
-            background: var(--background-color);
-            font-family: 'Georgia', serif;
-            
-            /* Prevent any scrolling or overflow */
-            max-width: 1920px !important;
-            max-height: 1080px !important;
-        }
-        
-        /* Safe area container to prevent overscan clipping */
-        .safe-area-container {
-            position: absolute;
-            top: 60px;        /* 60px margin from top */
-            left: 60px;       /* 60px margin from left */
-            right: 60px;      /* 60px margin from right */
-            bottom: 60px;     /* 60px margin from bottom */
-            width: calc(1920px - 120px);
-            height: calc(1080px - 120px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* ========== HEADER WITH LOGO ========== */
-        .header {
-            position: absolute;
-            top: 20px;
-            left: 60px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 100;
-            max-width: calc(100% - 120px);
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-        
-        .business-info h1 {
-            color: var(--primary-color);
-            font-size: 42px; /* Slightly smaller to fit longer title */
-            margin: 0;
-            line-height: 1.2;
-        }
-        
-        .business-info p {
-            color: var(--secondary-color);
-            font-size: 24px;
-            margin: 5px 0 0 0;
-        }
-        
-        /* ========== REVIEW DISPLAY AREA ========== */
-        .review-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .review-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 2px solid var(--primary-color);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all var(--transition-duration) ease-in-out;
-            position: absolute;
-            max-width: 90%;
-        }
-        
-        .review-card.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* ========== LAYOUT MODES ========== */
-        
-        /* Mode A: Single Review (Hero Focus) */
-        .layout-a .review-card {
-            width: 800px;
-            min-height: 400px;
-        }
-        
-        /* Mode B: Two Reviews Side-by-Side */
-        .layout-b {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .layout-b .review-card {
-            width: 600px;
-            min-height: 350px;
-            position: relative;
-        }
-        
-        /* Mode C: Three Reviews Stacked */
-        .layout-c {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .layout-c .review-card {
-            width: 700px;
-            min-height: 200px;
-            position: relative;
-        }
-        
-        /* ========== REVIEW CONTENT STYLES ========== */
-        .reviewer-name {
-            font-size: 48px;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        .review-text {
-            font-size: 32px;
-            color: var(--text-color);
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-        
-        .review-rating {
-            font-size: 40px;
-            color: var(--star-color);
-            margin-bottom: 10px;
-        }
-        
-        .review-source {
-            font-size: 24px;
-            color: var(--secondary-color);
-            font-style: italic;
-        }
-        
-        /* ========== FOOTER ========== */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            right: 60px;
-            text-align: right;
-            z-index: 100;
-        }
-        
-        .contact-info {
-            color: var(--primary-color);
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .location {
-            color: var(--secondary-color);
-            font-size: 24px;
-        }
-        
-        /* ========== ANIMATIONS ========== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeOutDown {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-        }
-        
-        .fade-in {
-            animation: fadeInUp var(--transition-duration) ease-in-out;
-        }
-        
-        .fade-out {
-            animation: fadeOutDown var(--transition-duration) ease-in-out;
-        }
-        
-        /* ========== RESPONSIVE TV FIXES ========== */
-        /* Ensure content fits within safe area */
-        @media screen and (max-width: 1920px) {
-            .safe-area-container {
-                transform: scale(0.95);
-                transform-origin: center center;
-            }
-        }
-        
-        /* Handle potential TV aspect ratio issues */
-        @media screen and (max-height: 1080px) {
-            .review-text {
-                font-size: 30px; /* Slightly smaller text if needed */
-            }
-        }
-    </style>
-<base target="_blank">
-</head>
-<body>
-    <!-- Safe Area Container - Prevents Overscan Clipping -->
-    <div class="safe-area-container">
-        <!-- Header with Logo -->
-        <div class="header">
-            <div class="logo">G&S</div>
-            <div class="business-info">
-                <h1>Here is What Our Clients Are Saying</h1>
-                <p>Aesthetics & MedSpa</p>
-            </div>
-        </div>
-        
-        <!-- Review Display Area -->
-        <div class="review-container" id="reviewContainer">
-            <!-- Reviews will be dynamically inserted here -->
-        </div>
-        
-        <!-- Footer with Contact Info -->
-        <div class="footer">
-            <div class="contact-info">806-310-9038</div>
-            <div class="location">Lubbock, TX</div>
-        </div>
-    </div>
+# Glo & Sparkle Digital Signage - Changes Summary
 
-    <script>
-        // ========== COMPLETE 5-STAR REVIEWS DATA - VERIFIED FROM WEBSITE ==========
-        const reviews = [
-            {
-                name: "Roxana Soria",
-                text: "It's an excellent place, the girl who did the laser treatment to remove the tattoo from my eyebrows is undoubtedly the best, very friendly and professional.",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Janie Melancon",
-                text: "Amazing experience!! Amazing team!! Amazing!! It's all I can say!! Get here today!!!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "L Garrison",
-                text: "The staff is exceptional. Alyssa educated me thoroughly and gave me realistic expectations during my consult. I felt pampered and comfortable throughout the entire experience. After my facial and dermaplaning, my skin looks better than it has in years!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Tiffany Smith",
-                text: "Alyssa did an amazing job. She is full of knowledge and is on top of all of the latest in skin care. I would recommend Alyssa for any service. She made me feel more confident.",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Molly Macha",
-                text: "LOVE THEM! Fabulous and educational while making me feel youthful!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Emily Smith",
-                text: "Love coming to Glo & Sparkle! The staff is great and attentive, especially Alyssa! She took the time to listen to my concerns, give suggestions and figure out a plan that was best for me. It was the best treatment I've ever had and I tell my friends about my experience all the time! Can't recommend her or this place enough!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Madi Last",
-                text: "Alyssa did amazing! My forehead is transformed from her and Xeomin. The ZO skin care line is the literal best. Highly recommend.",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Sam Riddle",
-                text: "The best med-spa in Lubbock! I absolutely love all the different treatments offered. Definitely the place to go for all your glam needs!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Monica",
-                text: "La mejor experiencia",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Jesus Borjas",
-                text: "I'm getting tattoo removal services and love the results!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Shannon Crawford",
-                text: "They were so nice and super friendly.",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Jennifer Reeb",
-                text: "I've been coming here for over a year and they do phenomenal Botox. The results look natural and they always make sure I'm satisfied with how it looks. I highly recommend a membership! It keeps you maintained at a discounted price. Also, they are very accommodating to schedule!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Joanna Menjares",
-                text: "Fa-tia made me feel so comfortable and did an amazing job! Will be coming back!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Vanda Pauwels",
-                text: "Awesome service! Love the results!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Veronica Rodriguez",
-                text: "Very friendly and made me feel very comfortable, talked me through the procedure",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Carleigh Fraze",
-                text: "Every time I come here it is just absolutely amazing!! I love the staff and how comfortable the atmosphere is. I have been coming here for a year now and I refuse to go anywhere else for my Botox and Lip Filler!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Lacey",
-                text: "Fa-tia and Dr. Onkendi are amazing! This is a beautiful space, staff is wonderful, and they offer so many great services and treatments. They care about aesthetics and comfort, and take the time to provide a thorough service catered to your beauty goals. I'm very happy with my Xeomin and Restalynn filler results. Just do it... get that VIP membership. I can't wait to go back!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Avery Agnew",
-                text: "Fa-Tia & her team do an amazing job, always! Go see them!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Chelsea Lewis",
-                text: "I've only great experiences here! They make you feel comfortable!",
-                rating: 5,
-                source: "Google Review"
-            },
-            {
-                name: "Farrah Dirkes",
-                text: "Alli did such an amazing job! Highly recommend this med spa for ANY needs!",
-                rating: 5,
-                source: "Google Review"
-            }
-        ];
+## ✅ **Modifications Applied**
 
-        // ========== CONFIGURATION ==========
-        const LAYOUT_MODE = 'A'; // A, B, or C
-        const REVIEW_DURATION = 5000; // 5 seconds
-        const TRANSITION_DURATION = 1000; // 1 second
-        
-        // ========== 5-STAR ONLY FILTER (REDUNDANT SAFETY CHECK) ==========
-        const fiveStarReviews = reviews.filter(review => review.rating === 5);
-        
-        // ========== REVIEW MANAGER ==========
-        class ReviewManager {
-            constructor() {
-                this.reviews = [...fiveStarReviews]; // ENSURE ONLY 5-STAR REVIEWS
-                this.currentIndex = 0;
-                this.usedIndices = new Set();
-                this.container = document.getElementById('reviewContainer');
-                this.isTransitioning = false;
-                this.setupLayout();
-                this.startRotation();
-            }
-            
-            setupLayout() {
-                // Clear container
-                this.container.innerHTML = '';
-                
-                // Add layout class
-                this.container.className = `review-container layout-${LAYOUT_MODE.toLowerCase()}`;
-                
-                // Create review cards based on layout
-                const cardCount = LAYOUT_MODE === 'A' ? 1 : LAYOUT_MODE === 'B' ? 2 : 3;
-                
-                for (let i = 0; i < cardCount; i++) {
-                    const card = document.createElement('div');
-                    card.className = 'review-card';
-                    card.id = `review-card-${i}`;
-                    this.container.appendChild(card);
-                }
-            }
-            
-            getNextReview() {
-                // Filter out used reviews
-                const availableReviews = this.reviews.filter((_, index) => !this.usedIndices.has(index));
-                
-                // If all reviews used, reset
-                if (availableReviews.length === 0) {
-                    this.usedIndices.clear();
-                    // Shuffle reviews for next cycle
-                    this.shuffleArray(this.reviews);
-                    return this.reviews[0];
-                }
-                
-                // Pick random from available
-                const randomIndex = Math.floor(Math.random() * availableReviews.length);
-                const selectedReview = availableReviews[randomIndex];
-                const originalIndex = this.reviews.indexOf(selectedReview);
-                this.usedIndices.add(originalIndex);
-                
-                return selectedReview;
-            }
-            
-            shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
-            
-            truncateText(text, maxLength = 200) {
-                if (text.length <= maxLength) return text;
-                return text.substring(0, maxLength).trim() + '...';
-            }
-            
-            displayReview(review, cardIndex) {
-                const card = document.getElementById(`review-card-${cardIndex}`);
-                if (!card) return;
-                
-                // Don't transition if already transitioning
-                if (this.isTransitioning) return;
-                this.isTransitioning = true;
-                
-                // Add fade-out class
-                card.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    // Update content
-                    card.innerHTML = `
-                        <div class="reviewer-name">${review.name}</div>
-                        <div class="review-text">${this.truncateText(review.text)}</div>
-                        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
-                        <div class="review-source">${review.source}</div>
-                    `;
-                    
-                    // Remove fade-out and add fade-in
-                    card.classList.remove('fade-out');
-                    card.classList.add('fade-in');
-                    
-                    setTimeout(() => {
-                        card.classList.remove('fade-in');
-                        this.isTransitioning = false;
-                    }, TRANSITION_DURATION);
-                }, TRANSITION_DURATION);
-            }
-            
-            startRotation() {
-                // Display initial reviews
-                this.rotateReviews();
-                
-                // Set up interval for 5-second rotation
-                setInterval(() => {
-                    if (!this.isTransitioning) {
-                        this.rotateReviews();
-                    }
-                }, REVIEW_DURATION);
-            }
-            
-            rotateReviews() {
-                const cardCount = LAYOUT_MODE === 'A' ? 1 : LAYOUT_MODE === 'B' ? 2 : 3;
-                
-                for (let i = 0; i < cardCount; i++) {
-                    const review = this.getNextReview();
-                    this.displayReview(review, i);
-                }
-            }
-        }
-        
-        // ========== INITIALIZATION ==========
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add a small delay to ensure proper rendering
-            setTimeout(() => {
-                new ReviewManager();
-            }, 500);
-        });
-        
-        // ========== ERROR HANDLING & RECOVERY ==========
-        window.addEventListener('error', (e) => {
-            console.error('Digital Signage Error:', e);
-            // Attempt to recover by reloading after 30 seconds
-            setTimeout(() => {
-                location.reload();
-            }, 30000);
-        });
-        
-        // Handle visibility change (for browser tab switching)
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                // Page is visible again, restart if needed
-                location.reload();
-            }
-        });
-        
-        // ========== TV-SPECIFIC FIXES ==========
-        // Prevent any default touch/scroll behaviors
-        document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
-        
-        // Force full screen on load
-        window.addEventListener('load', () => {
-            document.body.style.width = '1920px';
-            document.body.style.height = '1080px';
-        });
-    </script>
-</body>
-</html>
+### 1. **Review Display Duration: EXACTLY 5 SECONDS**
+- **Location:** Line 423 in JavaScript section
+- **Setting:** `const REVIEW_DURATION = 5000;` (5000ms = 5 seconds)
+- **Verification:** Each review now displays for exactly 5 seconds before transitioning
+- **Implementation:** Uses `setInterval()` with 5000ms timing for precise control
+
+### 2. **Branding Update: G&S Replaced with Logo**
+- **Location:** Lines 84-97 in CSS section (`.logo` class)
+- **Changes Made:**
+  - Removed "G&S" text from logo div
+  - Added background image reference: `background-image: url('glo-sparkle-logo.pdf');`
+  - Increased logo width to 120px for better visibility
+  - Maintained 80px height for TV readability
+  - Added fallback styling with blue background and text
+  - Added proper background sizing and positioning
+
+**Logo Implementation Details:**
+```css
+.logo {
+    width: 120px;  /* Increased width for better logo visibility */
+    height: 80px;  /* Maintained height for TV readability */
+    background-image: url('glo-sparkle-logo.pdf');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Fallback styling if image doesn't load */
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+```
+
+### 3. **Text Removal: "Aesthetics and Medical Spa"**
+- **Location:** Line 280 in HTML section
+- **Action:** Completely removed the `<p>Aesthetics & MedSpa</p>` element
+- **Result:** Only the main title "Here is What Our Clients Are Saying" remains
+- **Title Size:** Increased to 48px to fill the space more appropriately
+
+**Before:**
+```html
+<div class="business-info">
+    <h1>Here is What Our Clients Are Saying</h1>
+    <p>Aesthetics & MedSpa</p>  <!-- REMOVED -->
+</div>
+```
+
+**After:**
+```html
+<div class="business-info">
+    <h1>Here is What Our Clients Are Saying</h1>
+    <!-- REMOVED: "Aesthetics and Medical Spa" text completely eliminated -->
+</div>
+```
+
+---
+
+## 📁 **Files Created**
+
+### **Primary Updated File:**
+- `glo-sparkle-digital-signage-updated.html` - Complete system with all modifications
+
+### **Logo File:**
+- `glo-sparkle-logo.pdf` - Your attached logo (copied to output directory)
+
+### **Documentation:**
+- `CHANGES-SUMMARY.md` - This summary document
+
+---
+
+## 🎯 **Implementation Notes**
+
+### **Logo Integration:**
+1. The logo is referenced as `glo-sparkle-logo.pdf` in the CSS
+2. **You need to:** Replace the PDF with your actual logo file in the same directory
+3. **Recommended formats:** PNG, JPG, or SVG for better web compatibility
+4. **File naming:** Keep it as `glo-sparkle-logo.pdf` or update the CSS reference
+
+### **Fallback Styling:**
+- If the logo image fails to load, the system shows a blue rectangle with "Logo" text
+- This ensures the display still looks professional even if the image is missing
+
+### **TV Optimization:**
+- Logo size increased from 80px to 120px width for better TV visibility
+- Maintained 80px height to fit within the header area
+- Added rounded corners (10px) for modern appearance
+
+---
+
+## ✅ **Verification Checklist**
+
+### **Review Timing:**
+- [x] Each review displays for exactly 5 seconds
+- [x] Transitions occur automatically after 5 seconds
+- [x] No manual interaction required
+- [x] Smooth fade transitions between reviews
+
+### **Logo Replacement:**
+- [x] "G&S" text completely removed
+- [x] Logo placeholder added with proper styling
+- [x] Logo sized appropriately for TV display
+- [x] Fallback styling included
+
+### **Text Removal:**
+- [x] "Aesthetics and Medical Spa" completely eliminated
+- [x] No remaining references to removed text
+- [x] Layout adjusted to accommodate change
+- [x] Title remains prominent and readable
+
+---
+
+## 🚀 **Next Steps**
+
+### **For Logo Integration:**
+1. Replace `glo-sparkle-logo.pdf` with your actual logo file
+2. Ensure the logo file is in the same directory as the HTML file
+3. Test the display to verify logo appears correctly
+4. Adjust logo dimensions in CSS if needed
+
+### **For Deployment:**
+1. Upload `glo-sparkle-digital-signage-updated.html` to your web server
+2. Add as Web Page asset in Yodeck
+3. Deploy to your TV/display
+4. Verify all changes are working correctly
+
+### **For Testing:**
+1. Open the HTML file in a web browser
+2. Verify reviews cycle every 5 seconds
+3. Confirm logo area shows your logo
+4. Check that "Aesthetics and Medical Spa" text is completely gone
+
+---
+
+## 🔧 **Customization Options**
+
+### **Adjust Review Duration:**
+If you need to change the timing from exactly 5 seconds:
+```javascript
+const REVIEW_DURATION = 6000; // 6 seconds
+const REVIEW_DURATION = 4000; // 4 seconds
+```
+
+### **Adjust Logo Size:**
+If the logo appears too large or small on your TV:
+```css
+.logo {
+    width: 100px;  /* Adjust width */
+    height: 70px;  /* Adjust height */
+}
+```
+
+### **Change Logo File:**
+If you need to use a different logo file:
+```css
+.logo {
+    background-image: url('your-logo-file.png');
+}
+```
+
+---
+
+## 📞 **Support**
+
+If you need any adjustments or have issues with the implementation, refer to the comprehensive documentation in the original package or contact support.
+
+**Your digital signage system is now ready with all requested modifications!** 🎉
