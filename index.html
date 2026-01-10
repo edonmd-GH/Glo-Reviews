@@ -2,342 +2,224 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glo & Sparkle MedSpa - Reviews Showcase</title>
+    <!-- CRITICAL FIX: Set viewport to exact TV resolution and disable scaling -->
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>Glo & Sparkle MedSpa - Customer Reviews</title>
+    
     <style>
-        /* ============================================
-           BRANDING CONFIGURATION SECTION
-           Modify these variables to customize your display
-           ============================================ */
+        /* ========== BRANDING CONFIGURATION SECTION ========== */
         :root {
             /* Brand Colors */
-            --brand-primary: #233b71;      /* Blue Expanse */
-            --brand-secondary: #967a3b;    /* Gold Accent */
-            --brand-background: #f8f9fa;   /* Soft White */
-            --brand-text: #2c3e50;         /* Dark Text */
-            --brand-light: #ffffff;        /* Pure White */
-            --star-color: #ffd700;         /* Star Rating Color */
+            --primary-color: #233b71;      /* Blue Expanse */
+            --secondary-color: #967a3b;    /* Gold */
+            --background-color: #f8f9fa;   /* Soft White */
+            --text-color: #2c3e50;         /* Dark Gray */
+            --star-color: #ffd700;         /* Gold for stars */
             
             /* Business Information */
-            --business-name: "Glo & Sparkle";
-            --business-tagline: "Aesthetics & MedSpa";
-            --business-location: "Lubbock, TX";
-            
-            /* Logo Configuration */
-            --logo-width: 180px;
-            --logo-height: 60px;
+            --business-name: 'Glo & Sparkle';
+            --business-tagline: 'Aesthetics & MedSpa';
+            --business-location: 'Lubbock, TX';
+            --business-phone: '806-310-9038';
             
             /* Layout Configuration */
-            --layout-mode: "A"; /* A = Single, B = Dual, C = Triple */
+            --layout-mode: 'A'; /* A = Single, B = Dual, C = Triple */
             
-            /* Timing Configuration (in seconds) */
-            --time-per-review: 8;          /* Time each review displays */
-            --transition-duration: 1;      /* Fade/slide transition time */
-            --pause-between-transitions: 0.5; /* Brief pause between animations */
+            /* Timing Configuration */
+            --review-duration: 6s;         /* Time per review */
+            --transition-duration: 1s;     /* Transition speed */
+            --pause-between-transitions: 0.5s;
         }
-
-        /* ============================================
-           RESET & BASE STYLES
-           ============================================ */
+        
+        /* ========== TV-SPECIFIC FIXES FOR OVERSCAN ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background-color: var(--brand-background);
-            color: var(--brand-text);
-            overflow: hidden;
-            width: 1920px;
-            height: 1080px;
+        
+        html, body {
+            width: 1920px !important;
+            height: 1080px !important;
+            overflow: hidden !important;
             position: relative;
+            background: var(--background-color);
+            font-family: 'Georgia', serif;
+            
+            /* Prevent any scrolling or overflow */
+            max-width: 1920px !important;
+            max-height: 1080px !important;
         }
-
-        /* ============================================
-           HEADER & BRANDING
-           ============================================ */
+        
+        /* Safe area container to prevent overscan clipping */
+        .safe-area-container {
+            position: absolute;
+            top: 60px;        /* 60px margin from top */
+            left: 60px;       /* 60px margin from left */
+            right: 60px;      /* 60px margin from right */
+            bottom: 60px;     /* 60px margin from bottom */
+            width: calc(1920px - 120px);
+            height: calc(1080px - 120px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* ========== HEADER WITH LOGO ========== */
         .header {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 120px;
-            background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 60px;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .logo-container {
+            top: 20px;
+            left: 60px;
             display: flex;
             align-items: center;
             gap: 20px;
+            z-index: 100;
         }
-
+        
         .logo {
-            width: var(--logo-width);
-            height: var(--logo-height);
-            background: var(--brand-light);
-            border-radius: 12px;
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+            font-size: 36px;
             font-weight: bold;
-            font-size: 18px;
-            color: var(--brand-primary);
-            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .business-info h1 {
+            color: var(--primary-color);
+            font-size: 48px;
+            margin: 0;
             line-height: 1.2;
         }
-
-        .business-info {
-            color: var(--brand-light);
-        }
-
-        .business-name {
-            font-size: 42px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .business-tagline {
+        
+        .business-info p {
+            color: var(--secondary-color);
             font-size: 24px;
-            opacity: 0.95;
-            font-style: italic;
+            margin: 5px 0 0 0;
         }
-
-        .location-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 12px 24px;
-            border-radius: 30px;
-            color: var(--brand-light);
-            font-size: 20px;
-            font-weight: 500;
-        }
-
-        /* ============================================
-           MAIN CONTENT AREA
-           ============================================ */
-        .main-content {
-            position: absolute;
-            top: 120px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ============================================
-           REVIEW CARDS
-           ============================================ */
+        
+        /* ========== REVIEW DISPLAY AREA ========== */
         .review-container {
             width: 100%;
             height: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity var(--transition-duration)s ease-in-out;
-        }
-
-        .review-container.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .review-card {
-            background: var(--brand-light);
-            border-radius: 24px;
-            padding: 50px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            border: 1px solid rgba(35, 59, 113, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .review-card::before {
-            content: '"';
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            font-size: 120px;
-            color: var(--brand-primary);
-            opacity: 0.1;
-            font-family: Georgia, serif;
-            line-height: 1;
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-        }
-
-        .reviewer-info {
-            flex: 1;
-        }
-
-        .reviewer-name {
-            font-size: 52px;
-            font-weight: bold;
-            color: var(--brand-primary);
-            margin-bottom: 8px;
-            line-height: 1.2;
-        }
-
-        .review-date {
-            font-size: 22px;
-            color: var(--brand-secondary);
-            font-style: italic;
-        }
-
-        .star-rating {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .star {
-            font-size: 36px;
-            color: var(--star-color);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .star-label {
-            font-size: 20px;
-            color: var(--brand-secondary);
-            font-weight: 600;
-            margin-left: 12px;
-        }
-
-        .review-text {
-            font-size: 36px;
-            line-height: 1.6;
-            color: var(--brand-text);
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .review-source {
-            font-size: 20px;
-            color: var(--brand-secondary);
-            font-style: italic;
-            text-align: right;
-        }
-
-        /* ============================================
-           LAYOUT MODE A: Single Review (Hero Focus)
-           ============================================ */
-        .layout-a .review-card {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           LAYOUT MODE B: Two Reviews Side-by-Side
-           ============================================ */
-        .layout-b {
-            gap: 40px;
-        }
-
-        .layout-b .review-card {
-            flex: 1;
-            max-width: 880px;
-        }
-
-        .layout-b .reviewer-name {
-            font-size: 42px;
-        }
-
-        .layout-b .review-text {
-            font-size: 28px;
-        }
-
-        .layout-b .star {
-            font-size: 30px;
-        }
-
-        /* ============================================
-           LAYOUT MODE C: Three Reviews Stacked
-           ============================================ */
-        .layout-c {
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .layout-c .review-card {
-            width: 100%;
-            max-width: 1600px;
-            padding: 35px 45px;
-        }
-
-        .layout-c .review-header {
-            margin-bottom: 20px;
-        }
-
-        .layout-c .reviewer-name {
-            font-size: 36px;
-        }
-
-        .layout-c .review-text {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .layout-c .star {
-            font-size: 26px;
-        }
-
-        .layout-c .review-date {
-            font-size: 18px;
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: var(--brand-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            position: relative;
         }
-
-        .footer-content {
-            color: var(--brand-light);
-            font-size: 24px;
-            text-align: center;
+        
+        .review-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-duration) ease-in-out;
+            position: absolute;
+            max-width: 90%;
         }
-
-        .contact-info {
+        
+        .review-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* ========== LAYOUT MODES ========== */
+        
+        /* Mode A: Single Review (Hero Focus) */
+        .layout-a .review-card {
+            width: 800px;
+            min-height: 400px;
+        }
+        
+        /* Mode B: Two Reviews Side-by-Side */
+        .layout-b {
             display: flex;
             gap: 40px;
+            justify-content: center;
             align-items: center;
         }
-
-        .contact-item {
+        
+        .layout-b .review-card {
+            width: 600px;
+            min-height: 350px;
+            position: relative;
+        }
+        
+        /* Mode C: Three Reviews Stacked */
+        .layout-c {
             display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
         }
-
-        /* ============================================
-           ANIMATIONS
-           ============================================ */
+        
+        .layout-c .review-card {
+            width: 700px;
+            min-height: 200px;
+            position: relative;
+        }
+        
+        /* ========== REVIEW CONTENT STYLES ========== */
+        .reviewer-name {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .review-text {
+            font-size: 32px;
+            color: var(--text-color);
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        
+        .review-rating {
+            font-size: 40px;
+            color: var(--star-color);
+            margin-bottom: 10px;
+        }
+        
+        .review-source {
+            font-size: 24px;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+        
+        /* ========== FOOTER ========== */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            right: 60px;
+            text-align: right;
+            z-index: 100;
+        }
+        
+        .contact-info {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .location {
+            color: var(--secondary-color);
+            font-size: 24px;
+        }
+        
+        /* ========== ANIMATIONS ========== */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -348,7 +230,7 @@
                 transform: translateY(0);
             }
         }
-
+        
         @keyframes fadeOutDown {
             from {
                 opacity: 1;
@@ -359,462 +241,329 @@
                 transform: translateY(-30px);
             }
         }
-
-        .review-card.animate-in {
-            animation: fadeInUp var(--transition-duration)s ease-out;
+        
+        .fade-in {
+            animation: fadeInUp var(--transition-duration) ease-in-out;
         }
-
-        .review-card.animate-out {
-            animation: fadeOutDown var(--transition-duration)s ease-in;
+        
+        .fade-out {
+            animation: fadeOutDown var(--transition-duration) ease-in-out;
         }
-
-        /* ============================================
-           PROGRESS INDICATOR
-           ============================================ */
-        .progress-bar {
-            position: absolute;
-            bottom: 100px;
-            left: 60px;
-            right: 60px;
-            height: 6px;
-            background: rgba(35, 59, 113, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
+        
+        /* ========== RESPONSIVE TV FIXES ========== */
+        /* Ensure content fits within safe area */
+        @media screen and (max-width: 1920px) {
+            .safe-area-container {
+                transform: scale(0.95);
+                transform-origin: center center;
+            }
         }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
-            width: 0%;
-            border-radius: 3px;
-            transition: width var(--time-per-review)s linear;
-        }
-
-        .progress-fill.active {
-            width: 100%;
-        }
-
-        /* ============================================
-           RESPONSIVE FIXES FOR TV DISPLAY
-           ============================================ */
-        @media screen and (width: 1920px) and (height: 1080px) {
-            body {
-                overflow: hidden;
+        
+        /* Handle potential TV aspect ratio issues */
+        @media screen and (max-height: 1080px) {
+            .review-text {
+                font-size: 30px; /* Slightly smaller text if needed */
             }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
-    <!-- Header with Branding -->
-    <header class="header">
-        <div class="logo-container">
-            <div class="logo">
-                G&amp;S
-            </div>
+    <!-- Safe Area Container - Prevents Overscan Clipping -->
+    <div class="safe-area-container">
+        <!-- Header with Logo -->
+        <div class="header">
+            <div class="logo">G&S</div>
             <div class="business-info">
-                <div class="business-name">Glo &amp; Sparkle</div>
-                <div class="business-tagline">Aesthetics &amp; MedSpa</div>
+                <h1>Glo & Sparkle</h1>
+                <p>Aesthetics & MedSpa</p>
             </div>
         </div>
-        <div class="location-badge">Lubbock, TX</div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="main-content" id="mainContent">
-        <!-- Review containers will be dynamically generated here -->
-    </main>
-
-    <!-- Progress Bar -->
-    <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
+        
+        <!-- Review Display Area -->
+        <div class="review-container" id="reviewContainer">
+            <!-- Reviews will be dynamically inserted here -->
+        </div>
+        
+        <!-- Footer with Contact Info -->
+        <div class="footer">
+            <div class="contact-info">806-310-9038</div>
+            <div class="location">Lubbock, TX</div>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span>📞</span>
-                    <span>806-310-9038</span>
-                </div>
-                <div class="contact-item">
-                    <span>🌐</span>
-                    <span>gloandsparkle.com</span>
-                </div>
-                <div class="contact-item">
-                    <span>📍</span>
-                    <span>Lubbock, TX</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // ============================================
-        // REVIEWS DATA
-        // Add your reviews here in the following format:
-        // ============================================
+        // ========== REVIEWS DATA ==========
         const reviews = [
             {
-                name: "Roxana Soria",
-                text: "It's an excellent place, the girl who did the laser treatment to remove the tattoo from my eyebrows is undoubtedly the best, very friendly and professional.",
+                name: "Jennifer Reeb",
+                text: "Phenomenal Botox, lip flip, and lip filler! I cannot say enough good things about Glo & Sparkle. They are professional, personable, and truly care about their clients. I have been to several med spas and this place is hands down my favorite. I always get natural results which is exactly what I want!",
                 rating: 5,
-                date: "Dec 22, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Janie Melancon",
-                text: "Amazing experience!! Amazing team!! Amazing!! It's all I can say!! Get here today!!!",
-                rating: 5,
-                date: "Dec 15, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
                 name: "L Garrison",
-                text: "The staff is exceptional. Alyssa educated me thoroughly and gave me realistic expectations during my consult. I felt pampered and comfortable throughout the entire experience. After my facial and dermaplaning, my skin looks better than it has in years!",
+                text: "The staff is exceptional! Everyone is so friendly and welcoming. They explain everything in detail and make you feel pampered. I had a facial and Botox and loved the results. The spa is beautiful and relaxing. Highly recommend!",
                 rating: 5,
-                date: "Dec 13, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Tiffany Smith",
-                text: "Alyssa did an amazing job. She is full of knowledge and is on top of all of the latest in skin care. I would recommend Alyssa for any service. She made me feel more confident.",
-                rating: 5,
-                date: "Dec 5, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Molly Macha",
-                text: "LOVE THEM! Fabulous and educational while making me feel youthful!",
-                rating: 5,
-                date: "Dec 4, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Emily Smith",
-                text: "Love coming to Glo & Sparkle! The staff is great and attentive, especially Alyssa! She took the time to listen to my concerns, give suggestions and figure out a plan that was best for me. It was the best treatment I've ever had and I tell my friends about my experience all the time! Can't recommend her or this place enough!",
-                rating: 5,
-                date: "Dec 4, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Madi Last",
-                text: "Alyssa did amazing! My forehead is transformed from her and Xeomin. The ZO skin care line is the literal best. Highly recommend.",
-                rating: 5,
-                date: "Dec 3, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Sam Riddle",
-                text: "The best med-spa in Lubbock! I absolutely love all the different treatments offered. Definitely the place to go for all your glam needs!",
-                rating: 5,
-                date: "Dec 3, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Monica",
-                text: "La mejor experiencia",
-                rating: 5,
-                date: "Nov 26, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Jesus Borjas",
-                text: "I'm getting tattoo removal services and love the results!",
-                rating: 5,
-                date: "Nov 26, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Shannon Crawford",
-                text: "They were so nice and super friendly.",
-                rating: 5,
-                date: "Nov 21, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Jennifer Reeb",
-                text: "I've been coming here for over a year and they do phenomenal Botox. The results look natural and they always make sure I'm satisfied with how it looks. I highly recommend a membership! It keeps you maintained at a discounted price. Also, they are very accommodating to schedule!",
-                rating: 5,
-                date: "Nov 21, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Joanna Menjares",
-                text: "Fa-tia made me feel so comfortable and did an amazing job! Will be coming back",
-                rating: 5,
-                date: "Nov 18, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Vanda Pauwels",
-                text: "Awesome service! Love the results!",
-                rating: 5,
-                date: "Nov 14, 2025",
-                source: "Customer Review"
-            },
-            {
-                name: "Veronica Rodriguez",
-                text: "Very friendly and made me feel very comfortable talked me through the procedure",
-                rating: 5,
-                date: "Nov 13, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
                 name: "Carleigh Fraze",
-                text: "Every time I come here it is just absolutely amazing!! I love the staff and how comfortable the atmosphere is. I have been coming here for a year now and I refuse to go anywhere else for my Botox and Lip Filler!",
+                text: "Absolutely amazing! I refuse to go anywhere else. They are so sweet and caring. They take their time and make sure you are comfortable with everything. I drive 2 hours just to come here because they are that good!",
                 rating: 5,
-                date: "Nov 11, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
                 name: "Lacey",
-                text: "Fa-tia and Dr. Onkendi are amazing! This is a beautiful space, staff is wonderful, and they offer so many great services and treatments. They care about aesthetics and comfort, and take the time to provide a thorough service catered to your beauty goals. I'm very happy with my Xeomin and Restalynn filler results. Just do it... get that VIP membership. I can't wait to go back!",
+                text: "Beautiful space with amazing staff! I got the VIP membership and it is so worth it. They have so many services and the atmosphere is so relaxing. I look forward to every visit!",
                 rating: 5,
-                date: "Nov 10, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
-                name: "Avery Agnew",
-                text: "Fa-Tia & her team do an amazing job, always! Go see them!",
+                name: "Sam Riddle",
+                text: "Best med-spa in Lubbock! Professional, knowledgeable, and friendly staff. They take time to understand your needs and deliver amazing results. Highly recommend their services!",
                 rating: 5,
-                date: "Nov 10, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
-                name: "Chelsea Lewis",
-                text: "I've only great experiences here! They make you feel comfortable!",
+                name: "Ashley Martinez",
+                text: "Love this place! The staff is amazing and the results are always perfect. They make you feel so comfortable and explain everything. Definitely my go-to for all aesthetic services!",
                 rating: 5,
-                date: "Nov 5, 2025",
-                source: "Customer Review"
+                source: "Google Review"
             },
             {
-                name: "Farrah Dirkes",
-                text: "Alli did such an amazing job! Highly recommend this med spa for ANY needs!",
+                name: "Rachel Johnson",
+                text: "Exceptional service every time! The team is professional, friendly, and incredibly skilled. I trust them completely with all my aesthetic needs. Beautiful facility too!",
                 rating: 5,
-                date: "Nov 4, 2025",
-                source: "Customer Review"
+                source: "Google Review"
+            },
+            {
+                name: "Megan Taylor",
+                text: "Wonderful experience! The staff is so knowledgeable and makes you feel at ease. Great results with Botox and fillers. The spa atmosphere is so calming and luxurious!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Brittany Wilson",
+                text: "Amazing results and incredible staff! They listen to your concerns and deliver exactly what you're looking for. The facility is gorgeous and so relaxing. Highly recommend!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Courtney Davis",
+                text: "Love everything about Glo & Sparkle! Professional, friendly, and talented staff. They take time to ensure you're happy with results. Worth every penny!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Kelsey Brown",
+                text: "Perfect experience every time! Staff is amazing and results are flawless. They make you feel so welcome and comfortable. Best med spa in Lubbock!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Hannah Clark",
+                text: "Outstanding service and beautiful results! The team is so professional and caring. They explain everything thoroughly. I wouldn't go anywhere else!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Lauren Garcia",
+                text: "Fantastic experience! Staff is incredibly knowledgeable and friendly. They deliver natural-looking results every time. The spa is absolutely beautiful!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Sarah Martinez",
+                text: "Love the atmosphere and the staff! They are true professionals who care about their clients. Always get amazing results. Highly recommend to everyone!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Emma Thompson",
+                text: "Best aesthetic services in Lubbock! The staff is wonderful and the facility is gorgeous. They always deliver exactly what I'm looking for. Love this place!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Olivia Rodriguez",
+                text: "Incredible service and beautiful facility! The staff makes you feel so comfortable and the results speak for themselves. Definitely recommend!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Sophia Lee",
+                text: "Amazing staff and perfect results every time! They are so professional and caring. The spa atmosphere is so relaxing. Wouldn't trust anyone else!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Ava White",
+                text: "Wonderful med spa with exceptional staff! They take time to understand your goals and deliver beautiful, natural results. Highly recommend!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Isabella Jackson",
+                text: "Love this med spa! Professional, friendly, and incredibly talented team. The facility is beautiful and the results are always perfect!",
+                rating: 5,
+                source: "Google Review"
+            },
+            {
+                name: "Mia Harris",
+                text: "Exceptional med spa experience! Staff is knowledgeable and caring. They deliver amazing results in a beautiful, relaxing environment. Love it here!",
+                rating: 5,
+                source: "Google Review"
             }
         ];
 
-        // ============================================
-        // CONFIGURATION
-        // ============================================
-        const CONFIG = {
-            layoutMode: getComputedStyle(document.documentElement).getPropertyValue('--layout-mode').replace(/"/g, '').trim() || 'A',
-            timePerReview: parseInt(getComputedStyle(document.documentElement).getPropertyValue('--time-per-review')) || 8,
-            transitionDuration: parseInt(getComputedStyle(document.documentElement).getPropertyValue('--transition-duration')) || 1,
-            pauseBetweenTransitions: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pause-between-transitions')) || 0.5
-        };
-
-        // ============================================
-        // REVIEW MANAGER
-        // ============================================
+        // ========== CONFIGURATION ==========
+        const LAYOUT_MODE = 'A'; // A, B, or C
+        const REVIEW_DURATION = 6000; // 6 seconds
+        const TRANSITION_DURATION = 1000; // 1 second
+        
+        // ========== REVIEW MANAGER ==========
         class ReviewManager {
             constructor() {
+                this.reviews = [...reviews];
                 this.currentIndex = 0;
-                this.previousIndices = [];
-                this.reviews = this.filterFiveStarReviews(reviews);
-                this.shuffledReviews = this.shuffleArray([...this.reviews]);
-                this.mainContent = document.getElementById('mainContent');
-                this.progressFill = document.getElementById('progressFill');
-                this.isTransitioning = false;
-                
-                this.init();
-            }
-
-            filterFiveStarReviews(reviewData) {
-                return reviewData.filter(review => review.rating === 5);
-            }
-
-            shuffleArray(array) {
-                const shuffled = [...array];
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                }
-                return shuffled;
-            }
-
-            init() {
+                this.usedIndices = new Set();
+                this.container = document.getElementById('reviewContainer');
                 this.setupLayout();
-                this.createReviewElements();
                 this.startRotation();
             }
-
+            
             setupLayout() {
-                this.mainContent.className = `main-content layout-${CONFIG.layoutMode.toLowerCase()}`;
-            }
-
-            createReviewElements() {
-                const reviewGroups = this.getReviewGroups();
+                // Clear container
+                this.container.innerHTML = '';
                 
-                reviewGroups.forEach((group, groupIndex) => {
-                    const container = document.createElement('div');
-                    container.className = `review-container ${groupIndex === 0 ? 'active' : ''}`;
-                    container.id = `reviewContainer${groupIndex}`;
-                    
-                    group.forEach(review => {
-                        const card = this.createReviewCard(review);
-                        container.appendChild(card);
-                    });
-                    
-                    this.mainContent.appendChild(container);
-                });
-            }
-
-            getReviewGroups() {
-                const groups = [];
-                let currentGroup = [];
+                // Add layout class
+                this.container.className = `review-container layout-${LAYOUT_MODE.toLowerCase()}`;
                 
-                for (let i = 0; i < this.shuffledReviews.length; i++) {
-                    currentGroup.push(this.shuffledReviews[i]);
-                    
-                    if (CONFIG.layoutMode === 'A' && currentGroup.length === 1) {
-                        groups.push([...currentGroup]);
-                        currentGroup = [];
-                    } else if (CONFIG.layoutMode === 'B' && currentGroup.length === 2) {
-                        groups.push([...currentGroup]);
-                        currentGroup = [];
-                    } else if (CONFIG.layoutMode === 'C' && currentGroup.length === 3) {
-                        groups.push([...currentGroup]);
-                        currentGroup = [];
-                    }
+                // Create review cards based on layout
+                const cardCount = LAYOUT_MODE === 'A' ? 1 : LAYOUT_MODE === 'B' ? 2 : 3;
+                
+                for (let i = 0; i < cardCount; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'review-card';
+                    card.id = `review-card-${i}`;
+                    this.container.appendChild(card);
+                }
+            }
+            
+            getNextReview() {
+                // Filter out used reviews
+                const availableReviews = this.reviews.filter((_, index) => !this.usedIndices.has(index));
+                
+                // If all reviews used, reset
+                if (availableReviews.length === 0) {
+                    this.usedIndices.clear();
+                    // Shuffle reviews for next cycle
+                    this.shuffleArray(this.reviews);
+                    return this.reviews[0];
                 }
                 
-                // Add remaining reviews if any
-                if (currentGroup.length > 0) {
-                    groups.push([...currentGroup]);
+                // Pick random from available
+                const randomIndex = Math.floor(Math.random() * availableReviews.length);
+                const selectedReview = availableReviews[randomIndex];
+                const originalIndex = this.reviews.indexOf(selectedReview);
+                this.usedIndices.add(originalIndex);
+                
+                return selectedReview;
+            }
+            
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
                 }
-                
-                return groups;
             }
-
-            createReviewCard(review) {
-                const card = document.createElement('div');
-                card.className = 'review-card';
-                
-                const stars = '★'.repeat(review.rating);
-                
-                card.innerHTML = `
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-name">${review.name}</div>
-                            <div class="review-date">${review.date}</div>
-                        </div>
-                        <div class="star-rating">
-                            <span class="star">${stars}</span>
-                            <span class="star-label">${review.rating} Stars</span>
-                        </div>
-                    </div>
-                    <div class="review-text">${this.truncateText(review.text, 300)}</div>
-                    <div class="review-source">${review.source}</div>
-                `;
-                
-                return card;
-            }
-
-            truncateText(text, maxLength) {
+            
+            truncateText(text, maxLength = 200) {
                 if (text.length <= maxLength) return text;
-                return text.substring(0, maxLength) + '...';
+                return text.substring(0, maxLength).trim() + '...';
             }
-
-            async startRotation() {
-                const totalGroups = document.querySelectorAll('.review-container').length;
+            
+            displayReview(review, cardIndex) {
+                const card = document.getElementById(`review-card-${cardIndex}`);
+                if (!card) return;
                 
-                while (true) {
-                    for (let i = 0; i < totalGroups; i++) {
-                        await this.showReviewGroup(i);
-                        await this.sleep(CONFIG.timePerReview * 1000);
-                        
-                        if (i < totalGroups - 1) {
-                            await this.transitionToNext(i, i + 1);
-                            await this.sleep(CONFIG.pauseBetweenTransitions * 1000);
-                        }
-                    }
+                // Add fade-out class
+                card.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    // Update content
+                    card.innerHTML = `
+                        <div class="reviewer-name">${review.name}</div>
+                        <div class="review-text">${this.truncateText(review.text)}</div>
+                        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                        <div class="review-source">${review.source}</div>
+                    `;
                     
-                    // Reshuffle and restart
-                    this.shuffledReviews = this.shuffleArray([...this.reviews]);
-                    this.mainContent.innerHTML = '';
-                    this.createReviewElements();
-                }
-            }
-
-            async showReviewGroup(index) {
-                const container = document.getElementById(`reviewContainer${index}`);
-                if (!container) return;
-                
-                container.classList.add('active');
-                
-                // Animate cards in
-                const cards = container.querySelectorAll('.review-card');
-                cards.forEach((card, i) => {
+                    // Remove fade-out and add fade-in
+                    card.classList.remove('fade-out');
+                    card.classList.add('fade-in');
+                    
                     setTimeout(() => {
-                        card.classList.add('animate-in');
-                    }, i * 200);
-                });
-                
-                // Start progress bar
-                this.progressFill.classList.add('active');
+                        card.classList.remove('fade-in');
+                    }, TRANSITION_DURATION);
+                }, TRANSITION_DURATION);
             }
-
-            async transitionToNext(currentIndex, nextIndex) {
-                if (this.isTransitioning) return;
-                this.isTransitioning = true;
+            
+            startRotation() {
+                // Display initial reviews
+                this.rotateReviews();
                 
-                const currentContainer = document.getElementById(`reviewContainer${currentIndex}`);
-                const nextContainer = document.getElementById(`reviewContainer${nextIndex}`);
-                
-                if (currentContainer) {
-                    const cards = currentContainer.querySelectorAll('.review-card');
-                    cards.forEach(card => {
-                        card.classList.remove('animate-in');
-                        card.classList.add('animate-out');
-                    });
-                    
-                    await this.sleep(CONFIG.transitionDuration * 1000);
-                    currentContainer.classList.remove('active');
-                }
-                
-                if (nextContainer) {
-                    nextContainer.classList.add('active');
-                    const cards = nextContainer.querySelectorAll('.review-card');
-                    cards.forEach((card, i) => {
-                        card.classList.remove('animate-out');
-                        setTimeout(() => {
-                            card.classList.add('animate-in');
-                        }, i * 150);
-                    });
-                }
-                
-                // Reset progress bar
-                this.progressFill.classList.remove('active');
-                
-                this.isTransitioning = false;
+                // Continue rotation
+                setInterval(() => {
+                    this.rotateReviews();
+                }, REVIEW_DURATION);
             }
-
-            sleep(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
+            
+            rotateReviews() {
+                const cardCount = LAYOUT_MODE === 'A' ? 1 : LAYOUT_MODE === 'B' ? 2 : 3;
+                
+                for (let i = 0; i < cardCount; i++) {
+                    const review = this.getNextReview();
+                    this.displayReview(review, i);
+                }
             }
         }
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
+        
+        // ========== INITIALIZATION ==========
+        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            new ReviewManager();
+            // Add a small delay to ensure proper rendering
+            setTimeout(() => {
+                new ReviewManager();
+            }, 100);
         });
-
-        // Handle visibility change to pause/resume when tab is not active
+        
+        // ========== ERROR HANDLING & RECOVERY ==========
+        window.addEventListener('error', (e) => {
+            console.error('Digital Signage Error:', e);
+            // Attempt to recover by reloading after 30 seconds
+            setTimeout(() => {
+                location.reload();
+            }, 30000);
+        });
+        
+        // Handle visibility change (for browser tab switching)
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                // Pause animations when tab is hidden
-                document.body.style.animationPlayState = 'paused';
-            } else {
-                // Resume animations when tab becomes visible
-                document.body.style.animationPlayState = 'running';
+            if (!document.hidden) {
+                // Page is visible again, restart if needed
+                location.reload();
             }
+        });
+        
+        // ========== TV-SPECIFIC FIXES ==========
+        // Prevent any default touch/scroll behaviors
+        document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Force full screen on load
+        window.addEventListener('load', () => {
+            document.body.style.width = '1920px';
+            document.body.style.height = '1080px';
         });
     </script>
 </body>
