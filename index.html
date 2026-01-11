@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glo & Spa-rkle Reviews - Dynamic Fetch</title>
+    <title>Glo & Spa-rkle Reviews - Advanced Sequencing</title>
     <style>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE - DYNAMIC FETCH
+           MEDICAL SPA REVIEWS SHOWCASE - ADVANCED SEQUENCING
            Fetches reviews from https://gloandsparkle.com/reviews/
+           Implements 3-newest-1-oldest sequencing pattern
            Includes date display and automatic refresh
            ============================================ */
         
@@ -98,79 +99,29 @@
             margin-top: 0;
         }
         
-        /* Loading Indicator */
-        .loading-indicator {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 14px;
-            color: #967a3b;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .loading-indicator.show {
-            opacity: 1;
-        }
-        
-        /* Error Message */
-        .error-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(220, 53, 69, 0.9);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 12px;
-            font-size: 18px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: none;
-        }
-        
-        .error-message.show {
-            display: block;
-        }
-        
         /* ============================================
-           REVIEWS CONTAINER - DYNAMIC CONTENT
+           REVIEWS CONTAINER - LAYOUT MODES A/B/C
            ============================================ */
         .reviews-container {
-            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100%;
             flex: 1;
-            margin: 0 auto;
-            padding: 0 50px;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* ============================================
-           REDESIGNED REVIEW CARD - NEAR-SQUARE, 1300px MAX-WIDTH
-           ============================================ */
+        /* Review Card Styling */
         .review-card {
-            width: 100%;
-            max-width: 1300px; /* CRITICAL: Strict max-width constraint */
-            min-height: 400px; /* Near-square proportions */
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 24px;
-            padding: 50px 60px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
-            backdrop-filter: blur(12px);
-            border: 4px solid #233b71; /* Blue Expanse */
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(150, 122, 59, 0.2); /* Cardueline Finch border */
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             opacity: 0;
             transform: translateY(30px);
-            margin: 0 auto;
-            box-sizing: border-box;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .review-card.visible {
@@ -185,69 +136,93 @@
         
         /* Star Rating */
         .star-rating {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            justify-content: center;
+            margin-bottom: 25px;
+            text-align: center;
         }
         
         .star {
-            width: 32px;
-            height: 32px;
-            margin-right: 6px;
             color: #967a3b; /* Cardueline Finch */
-            font-size: 32px;
+            font-size: 36px;
+            letter-spacing: 8px;
             text-shadow: 0 2px 4px rgba(150, 122, 59, 0.3);
         }
         
-        /* Review Content - WITH DATE DISPLAY */
+        /* Review Content */
         .review-content {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            justify-content: space-between;
         }
         
         .review-text {
             font-size: 32px;
             line-height: 1.5;
             color: #2d3436;
-            font-weight: 300;
-            max-height: none;
-            overflow: visible;
-            display: block;
-            text-align: left;
-            padding: 0 20px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 30px;
+            max-height: 8em;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
         }
         
-        /* Reviewer Info with Date */
+        /* Reviewer Info */
         .reviewer-info {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         
         .review-author {
-            font-size: 40px;
-            font-weight: 400;
+            font-size: 36px;
+            font-weight: 600;
             color: #233b71; /* Blue Expanse */
-            text-align: right;
-            flex: 1;
+            padding-right: 15px;
+            border-right: 2px solid #967a3b;
         }
         
         .review-date {
             font-size: 18px;
-            color: #6c757d; /* Muted gray for date */
+            color: #6c757d;
             font-weight: 400;
-            margin-left: 20px;
-            white-space: nowrap;
         }
         
         .review-date.hidden {
             display: none;
+        }
+        
+        /* Loading and Error States */
+        .loading-indicator, .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 28px;
+            color: #6c757d;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            max-width: 600px;
+        }
+        
+        .loading-indicator.show, .error-message.show {
+            opacity: 1;
+        }
+        
+        .error-message {
+            color: #721c24;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
         }
         
         /* ============================================
@@ -287,6 +262,7 @@
             text-align: center;
             padding-right: 0;
             margin-top: 30px;
+            border-right: none;
         }
         
         .layout-mode-a .review-date {
@@ -333,6 +309,7 @@
             text-align: left;
             padding-right: 0;
             margin-top: 20px;
+            border-right: none;
         }
         
         .layout-mode-b .review-date {
@@ -394,6 +371,7 @@
             text-align: left;
             padding-right: 0;
             margin-top: 8px;
+            border-right: none;
         }
         
         .layout-mode-c .review-date {
@@ -465,14 +443,14 @@
         </div>
         
         <!-- Configuration Notice -->
-        <div class="config-notice">Dynamic Reviews | Auto-Refresh: 24h | Glo & Spa-rkle</div>
+        <div class="config-notice">Advanced Sequencing | 3-Newest-1-Oldest Pattern | Auto-Refresh: 24h</div>
     </div>
 
     <script>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE - DYNAMIC FETCH
+           MEDICAL SPA REVIEWS SHOWCASE - ADVANCED SEQUENCING
+           Implements 3-newest-1-oldest sequencing pattern
            Fetches reviews from https://gloandsparkle.com/reviews/
-           Includes date display and automatic refresh
            ============================================ */
         
         // ============================================
@@ -558,12 +536,16 @@
         // ============================================
         // GLOBAL STATE
         // ============================================
-        let currentReviews = [];
-        let currentIndex = 0;
+        let allReviews = [];           // All available reviews (sorted newest first)
+        let newestQueue = [];          // Queue for newest reviews
+        let oldestQueue = [];          // Queue for oldest reviews
+        let playbackQueue = [];        // Master queue for current cycle
+        let currentPlaybackIndex = 0;  // Current position in playback queue
         let reviewInterval;
         let isTransitioning = false;
         let lastFetchTime = 0;
         let isFetching = false;
+        let cycleCount = 0;
         
         // ============================================
         // INITIALIZATION
@@ -677,12 +659,14 @@
                         return dateB - dateA;
                     });
                     
-                    currentReviews = newReviews;
-                    currentIndex = 0;
+                    allReviews = newReviews;
                     lastFetchTime = now;
                     
+                    // Rebuild queues with new data
+                    buildReviewQueues();
+                    
                     // Refresh display if already running
-                    if (currentReviews.length > 0) {
+                    if (allReviews.length > 0) {
                         displayReviews();
                     }
                 }
@@ -691,6 +675,96 @@
                 console.error('Error in refreshReviews:', error);
                 // Continue with current reviews
             }
+        }
+        
+        // ============================================
+        // QUEUE MANAGEMENT - 3-NEWEST-1-OLDEST LOGIC
+        // ============================================
+        
+        function buildReviewQueues() {
+            if (allReviews.length === 0) return;
+            
+            // Split reviews into newest and oldest halves
+            const midPoint = Math.ceil(allReviews.length / 2);
+            newestQueue = [...allReviews.slice(0, midPoint)];  // First half (newest)
+            oldestQueue = [...allReviews.slice(midPoint)];     // Second half (oldest)
+            
+            // Build playback queue: [Newest, Newest, Newest, Oldest]
+            playbackQueue = [];
+            
+            // Continue building until all reviews are in the playback queue
+            const totalReviews = allReviews.length;
+            let reviewsAdded = 0;
+            
+            while (reviewsAdded < totalReviews) {
+                // Add up to 3 newest reviews
+                for (let i = 0; i < 3 && newestQueue.length > 0 && reviewsAdded < totalReviews; i++) {
+                    playbackQueue.push({
+                        review: newestQueue.shift(),
+                        type: 'newest'
+                    });
+                    reviewsAdded++;
+                }
+                
+                // Add 1 oldest review if available
+                if (oldestQueue.length > 0 && reviewsAdded < totalReviews) {
+                    playbackQueue.push({
+                        review: oldestQueue.shift(),
+                        type: 'oldest'
+                    });
+                    reviewsAdded++;
+                } else if (newestQueue.length > 0 && reviewsAdded < totalReviews) {
+                    // If no more oldest reviews, continue with newest
+                    playbackQueue.push({
+                        review: newestQueue.shift(),
+                        type: 'newest'
+                    });
+                    reviewsAdded++;
+                }
+            }
+            
+            // Reset playback index
+            currentPlaybackIndex = 0;
+            
+            console.log(`Queue built: ${playbackQueue.length} reviews in cycle`);
+            console.log(`Pattern: 3-newest-1-oldest repeating`);
+        }
+        
+        function getNextReviews() {
+            if (playbackQueue.length === 0) {
+                // Rebuild queues if empty (start new cycle)
+                buildReviewQueues();
+                cycleCount++;
+                console.log(`Starting cycle ${cycleCount + 1}`);
+            }
+            
+            // Determine how many reviews to show based on layout mode
+            let reviewsToShow;
+            switch(LAYOUT_MODE) {
+                case 'A': reviewsToShow = 1; break;
+                case 'B': reviewsToShow = 2; break;
+                case 'C': reviewsToShow = 3; break;
+                default: reviewsToShow = 1;
+            }
+            
+            // Get reviews from playback queue
+            const result = [];
+            for (let i = 0; i < reviewsToShow; i++) {
+                if (currentPlaybackIndex < playbackQueue.length) {
+                    result.push(playbackQueue[currentPlaybackIndex]);
+                    currentPlaybackIndex++;
+                } else {
+                    // If we've reached the end, rebuild queues
+                    buildReviewQueues();
+                    cycleCount++;
+                    if (currentPlaybackIndex < playbackQueue.length) {
+                        result.push(playbackQueue[currentPlaybackIndex]);
+                        currentPlaybackIndex++;
+                    }
+                }
+            }
+            
+            return result;
         }
         
         // ============================================
@@ -708,11 +782,11 @@
         
         async function startReviewShowcase() {
             // Ensure we have reviews
-            if (currentReviews.length === 0) {
+            if (allReviews.length === 0) {
                 await refreshReviews();
             }
             
-            if (currentReviews.length === 0) {
+            if (allReviews.length === 0) {
                 // If still no reviews, show error
                 document.getElementById('errorMessage').classList.add('show');
                 document.getElementById('errorMessage').innerHTML = 
@@ -722,6 +796,9 @@
             
             // Hide error message if reviews are available
             document.getElementById('errorMessage').classList.remove('show');
+            
+            // Build initial queues
+            buildReviewQueues();
             
             // Display first set of reviews
             displayReviews();
@@ -734,37 +811,33 @@
             const container = document.getElementById('reviewsContainer');
             container.innerHTML = '';
             
-            if (currentReviews.length === 0) {
+            if (playbackQueue.length === 0) {
                 return;
             }
             
-            // Determine how many reviews to show based on layout mode
-            let reviewsToShow;
-            switch(LAYOUT_MODE) {
-                case 'A': reviewsToShow = 1; break;
-                case 'B': reviewsToShow = 2; break;
-                case 'C': reviewsToShow = 3; break;
-                default: reviewsToShow = 1;
-            }
+            // Get next set of reviews based on layout mode
+            const nextReviews = getNextReviews();
             
             // Create review cards
-            for (let i = 0; i < reviewsToShow; i++) {
-                const reviewIndex = (currentIndex + i) % currentReviews.length;
-                const review = currentReviews[reviewIndex];
-                
-                const reviewCard = createReviewCard(review);
+            nextReviews.forEach((item, index) => {
+                const reviewCard = createReviewCard(item.review, item.type);
                 container.appendChild(reviewCard);
                 
                 // Animate in with slight delay
                 setTimeout(() => {
                     reviewCard.classList.add('visible');
-                }, i * 100);
-            }
+                }, index * 100);
+            });
         }
         
-        function createReviewCard(review) {
+        function createReviewCard(review, type = 'newest') {
             const card = document.createElement('div');
             card.className = 'review-card';
+            
+            // Add subtle visual indicator for newest vs oldest (optional)
+            if (type === 'oldest') {
+                card.style.borderColor = 'rgba(150, 122, 59, 0.4)'; // Slightly stronger border for oldest
+            }
             
             // Format date if available
             let dateDisplay = '';
@@ -820,7 +893,7 @@
         }
         
         function nextReview() {
-            if (isTransitioning || currentReviews.length === 0) return;
+            if (isTransitioning || playbackQueue.length === 0) return;
             isTransitioning = true;
             
             // Fade out current reviews
@@ -831,17 +904,8 @@
                 }, index * 50);
             });
             
-            // Update index and prepare next reviews
+            // Display next reviews after transition
             setTimeout(() => {
-                // Move to next review (or shuffle if at end)
-                currentIndex++;
-                if (currentIndex >= currentReviews.length) {
-                    currentIndex = 0;
-                    // Reshuffle to prevent repeats
-                    currentReviews = shuffleArray([...currentReviews]);
-                }
-                
-                // Display next reviews
                 displayReviews();
                 
                 // Reset transition flag
@@ -850,20 +914,6 @@
                 }, TRANSITION_TIME);
                 
             }, TRANSITION_TIME);
-        }
-        
-        // ============================================
-        // UTILITY FUNCTIONS
-        // ============================================
-        
-        // Fisher-Yates shuffle algorithm
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
         }
         
         // ============================================
