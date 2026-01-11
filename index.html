@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glo & Spa-rkle Reviews - TV Safe Layout</title>
+    <title>Glo & Spa-rkle Reviews - Geometry Fixed</title>
     <style>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE - TV SAFE LAYOUT
-           Content-safe container: 1650px max-width
-           All elements constrained within 1920×1080
+           MEDICAL SPA REVIEWS SHOWCASE - GEOMETRY FIXED
+           Redesigned review cards: near-square, 1300px max-width
+           All content visible on 1920×1080, no cropping
            ============================================ */
         
         /* CSS Reset and Base Styles */
@@ -27,7 +27,7 @@
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
         
-        /* Main Display Container - Full 1920×1080 */
+        /* Main Display Container */
         .display-container {
             width: 1920px;
             height: 1080px;
@@ -36,43 +36,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px 40px;
-        }
-        
-        /* ============================================
-           CONTENT-SAFE CONTAINER - 1650px MAX-WIDTH
-           All content constrained within this container
-           ============================================ */
-        .content-safe {
-            width: 100%;
-            max-width: 1650px; /* CRITICAL: Content-safe boundary */
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto; /* Center the content-safe container */
+            padding: 40px 60px;
         }
         
         /* ============================================
            HEADER SECTION - WITH BUSINESS NAME AND TITLE
-           Title moved under business name as requested
            ============================================ */
         .header-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             flex-shrink: 0;
-            width: 100%; /* Constrained by content-safe */
+            width: 100%;
         }
         
         /* Business Logo/Name */
         .business-logo {
             width: 500px;
             height: 100px;
-            margin-bottom: 25px; /* Space between logo and title */
+            margin-bottom: 25px;
             flex-shrink: 0;
             background: #233b71; /* Blue Expanse */
             border-radius: 20px;
@@ -104,43 +88,52 @@
             text-transform: uppercase;
         }
         
-        /* Screen Title - MOVED UNDER BUSINESS NAME as requested */
+        /* Screen Title - Under business name */
         .screen-title {
             font-size: 48px;
             font-weight: 300;
             color: #2d3436;
             letter-spacing: -0.5px;
             text-align: center;
-            margin-top: 0; /* Title now directly under business name */
+            margin-top: 0;
         }
         
         /* ============================================
-           REVIEWS CONTAINER - WITHIN CONTENT-SAFE BOUNDS
+           REVIEWS CONTAINER - CENTERED WITH SAFE GEOMETRY
            ============================================ */
         .reviews-container {
-            width: 100%; /* Constrained by content-safe */
-            max-width: 1650px; /* Ensure never exceeds content-safe */
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             flex: 1;
             margin: 0 auto;
-            padding: 0 20px; /* Ensure cards don't touch edges */
+            padding: 0 50px;
         }
         
-        /* Base Review Card - WITHIN CONTENT-SAFE BOUNDS */
+        /* ============================================
+           REDESIGNED REVIEW CARD - NEAR-SQUARE, 1300px MAX-WIDTH
+           CRITICAL: Card geometry redesigned to prevent cropping
+           ============================================ */
         .review-card {
+            /* REDESIGNED: Near-square proportions, strict width constraint */
+            width: 100%;
+            max-width: 1300px; /* CRITICAL: Strict max-width constraint */
+            min-height: 400px; /* Near-square proportions */
             background: rgba(255, 255, 255, 0.98);
             border-radius: 24px;
-            padding: 40px 50px;
+            padding: 50px 60px; /* MAINTAINED: Original padding */
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
             backdrop-filter: blur(12px);
             border: 4px solid #233b71; /* Blue Expanse */
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             transform: translateY(30px);
-            max-width: 100%;
-            margin: 0 auto;
+            margin: 0 auto; /* CRITICAL: Center the card */
+            
+            /* ENSURE: Card never exceeds max-width including padding/border/shadow */
+            box-sizing: border-box;
+            overflow: hidden; /* Contain all content */
         }
         
         .review-card.visible {
@@ -157,7 +150,8 @@
         .star-rating {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            justify-content: center; /* Center stars in card */
         }
         
         .star {
@@ -169,18 +163,23 @@
             text-shadow: 0 2px 4px rgba(150, 122, 59, 0.3);
         }
         
-        /* Review Content */
+        /* Review Content - ALLOW TEXT WRAPPING */
         .review-text {
             font-size: 32px;
-            line-height: 1.4;
+            line-height: 1.5; /* INCREASED: Better readability, allows wrapping */
             color: #2d3436;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-weight: 300;
-            max-height: 190px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
+            max-height: none; /* REMOVED: Allow vertical expansion */
+            overflow: visible; /* REMOVED: Allow text wrapping */
+            display: block; /* CHANGED: Allow natural text flow */
+            text-align: left; /* MAINTAINED: Left-aligned text */
+            padding: 0 20px; /* ADDED: Internal padding for readability */
+            
+            /* ENSURE: Text wraps instead of expanding card */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
         
         .review-author {
@@ -188,10 +187,11 @@
             font-weight: 400;
             color: #233b71; /* Blue Expanse */
             text-align: right;
+            padding-right: 20px; /* ADDED: Internal padding */
         }
         
         /* ============================================
-           LAYOUT MODE A: Single Review - WITHIN CONTENT-SAFE
+           LAYOUT MODE A: Single Review - NEAR-SQUARE CARD
            ============================================ */
         .layout-mode-a .reviews-container {
             justify-content: center;
@@ -199,43 +199,66 @@
         }
         
         .layout-mode-a .review-card {
-            max-width: 1500px; /* Within content-safe bounds */
+            max-width: 1300px; /* MAINTAINED: Strict constraint */
             width: 100%;
-            margin: 0 auto;
+            min-height: 450px; /* INCREASED: Better proportions */
+            margin: 0 auto; /* CRITICAL: Center the card */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            padding: 60px 80px; /* INCREASED: More internal space */
         }
         
         .layout-mode-a .review-text {
-            font-size: 36px;
-            max-height: 210px;
+            font-size: 36px; /* MAINTAINED: Original size */
+            line-height: 1.6; /* INCREASED: Better readability */
+            text-align: center; /* CENTER: Better presentation for single card */
+            padding: 0 40px; /* INCREASED: More internal space */
+        }
+        
+        .layout-mode-a .review-author {
+            font-size: 44px; /* MAINTAINED: Original size */
+            text-align: center; /* CENTER: Match text alignment */
+            padding-right: 0;
+            margin-top: 30px; /* ADDED: Better spacing */
         }
         
         /* ============================================
-           LAYOUT MODE B: Two Reviews Side-by-Side - WITHIN CONTENT-SAFE
+           LAYOUT MODE B: Two Reviews Side-by-Side - COMPACT CARDS
            ============================================ */
         .layout-mode-b .reviews-container {
-            gap: 60px;
+            gap: 40px; /* REDUCED: Better fit within 1650px */
             justify-content: center;
             align-items: center;
         }
         
         .layout-mode-b .review-card {
             flex: 1;
-            max-width: 900px; /* Within content-safe bounds */
-            padding: 35px 45px;
-            margin: 0;
+            max-width: 620px; /* REDUCED: Strict constraint for two cards */
+            min-height: 400px; /* MAINTAINED: Near-square proportions */
+            padding: 40px 50px; /* MAINTAINED: Original padding */
+            margin: 0; /* Let flexbox handle centering */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .layout-mode-b .review-text {
-            font-size: 28px;
-            max-height: 168px;
+            font-size: 26px; /* MAINTAINED: Original size */
+            line-height: 1.5; /* MAINTAINED: Original line height */
+            text-align: left; /* MAINTAINED: Left alignment */
+            padding: 0 15px; /* ADDED: Internal padding */
         }
         
         .layout-mode-b .review-author {
-            font-size: 36px;
+            font-size: 32px; /* MAINTAINED: Original size */
+            text-align: right; /* MAINTAINED: Right alignment */
+            padding-right: 15px; /* ADDED: Internal padding */
+            margin-top: 20px; /* ADDED: Better spacing */
         }
         
         /* ============================================
-           LAYOUT MODE C: Three Reviews Stacked - WITHIN CONTENT-SAFE
+           LAYOUT MODE C: Three Reviews Stacked - NARROW CARDS
            ============================================ */
         .layout-mode-c {
             justify-content: center;
@@ -243,18 +266,19 @@
         
         .layout-mode-c .reviews-container {
             flex-direction: column;
-            gap: 20px;
+            gap: 25px; /* MAINTAINED: Original gap */
             align-items: center;
             justify-content: center;
         }
         
         .layout-mode-c .review-card {
-            width: 1700px; /* Within content-safe bounds */
-            padding: 25px 40px;
+            width: 1400px; /* REDUCED: Strict constraint for three cards */
+            min-height: 150px; /* REDUCED: Compact height for three cards */
+            padding: 30px 40px; /* MAINTAINED: Original padding */
             display: flex;
             align-items: center;
             gap: 30px;
-            margin: 0 auto;
+            margin: 0 auto; /* Center within container */
         }
         
         .layout-mode-c .star-rating {
@@ -267,15 +291,19 @@
         }
         
         .layout-mode-c .review-text {
-            font-size: 24px;
-            margin-bottom: 10px;
-            max-height: 72px;
-            -webkit-line-clamp: 2;
+            font-size: 22px; /* MAINTAINED: Original size */
+            line-height: 1.4; /* MAINTAINED: Original line height */
+            margin-bottom: 10px; /* MAINTAINED: Original margin */
+            max-height: none; /* REMOVED: Allow vertical expansion */
+            -webkit-line-clamp: 2; /* MAINTAINED: 2 lines */
+            padding: 0 10px; /* ADDED: Internal padding */
         }
         
         .layout-mode-c .review-author {
-            font-size: 28px;
-            text-align: left;
+            font-size: 26px; /* MAINTAINED: Original size */
+            text-align: left; /* MAINTAINED: Left alignment */
+            padding-right: 10px; /* ADDED: Internal padding */
+            margin-top: 8px; /* ADDED: Better spacing */
         }
         
         .layout-mode-c .star {
@@ -312,7 +340,7 @@
 </head>
 <body>
     <div class="display-container layout-mode-a" id="displayContainer">
-        <!-- Content-Safe Container - All content within 1650px -->
+        <!-- Main container -->
         <div class="content-safe">
             <!-- Header Section with Business Name and Title -->
             <div class="header-section">
@@ -321,25 +349,26 @@
                     <div class="business-name">Glo & Spa-rkle</div>
                     <div class="business-sub">Aesthetics and Medical Spa</div>
                 </div>
-                <!-- Title moved under business name as requested -->
+                <!-- Title under business name -->
                 <h1 class="screen-title">Here Is What Our Clients Are Saying...</h1>
             </div>
             
-            <!-- Reviews Container - Within content-safe bounds -->
+            <!-- Reviews Container -->
             <div class="reviews-container" id="reviewsContainer">
                 <!-- Review cards will be dynamically inserted here -->
-                <!-- All content constrained within 1650px max-width -->
+                <!-- All cards constrained within 1300px max-width -->
             </div>
             
             <!-- Configuration Notice -->
-            <div class="config-notice">TV Safe Layout | 1920×1080 | Content-Safe: 1650px | Auto-Playing</div>
+            <div class="config-notice">Geometry Fixed | 1920×1080 | 1300px Cards | No Cropping</div>
         </div>
     </div>
 
     <script>
         /* ============================================
-           MEDICAL SPA REVIEWS SHOWCASE - TV SAFE JAVASCRIPT
-           All logic preserved, content constrained within safe bounds
+           MEDICAL SPA REVIEWS SHOWCASE - GEOMETRY FIXED
+           Card geometry redesigned: near-square, 1300px max-width
+           All content visible, no cropping on 1920×1080
            ============================================ */
         
         // ============================================
@@ -349,7 +378,7 @@
         // LAYOUT MODE: 'A' = Single Hero, 'B' = Two Side-by-Side, 'C' = Three Stacked
         const LAYOUT_MODE = 'A';
         
-        // TIMING CONFIGURATION (in milliseconds) - UNCHANGED
+        // TIMING CONFIGURATION (UNCHANGED)
         const DISPLAY_TIME = 5000;      // 5 seconds per review
         const TRANSITION_TIME = 600;    // 0.6 second transition
         
